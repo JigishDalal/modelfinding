@@ -1,0 +1,4 @@
+node_modules/
+.DS_Store
+# Uncomment the line below if you add real API keys to config.js
+# js/config.js
