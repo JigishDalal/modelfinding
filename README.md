@@ -49,3 +49,4 @@ This project is perfectly suited for zero-configuration static deployment on [Ve
 - CSS3 (Vanilla)
 - JavaScript (Vanilla, ES6)
 - [Lucide Icons](https://lucide.dev/)
+# modelfinding
