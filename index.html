@@ -16,6 +16,9 @@
     <div class="app-container">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
+            <button id="sidebar-close" class="sidebar-close-btn" aria-label="Close menu">
+                <i data-lucide="x"></i>
+            </button>
             <div class="logo-area">
                 <div class="logo-icon">
                     <i data-lucide="brain-circuit"></i>
@@ -79,6 +82,9 @@
         <main class="main-content">
             <!-- Header -->
             <header class="top-header">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Open menu">
+                    <i data-lucide="menu"></i>
+                </button>
                 <div class="header-title-wrapper">
                     <h2 id="page-title">Model Search & Specs</h2>
                     <p id="page-subtitle" class="subtitle">Search, inspect, and analyze any LLM or SLM for your next application</p>
@@ -146,7 +152,7 @@
                         </div>
                     </div>
                     
-                    <div id="glossary-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div id="glossary-grid" class="responsive-card-grid">
                         <!-- Loaded dynamically -->
                     </div>
                 </section>
@@ -1115,7 +1121,7 @@ class LlamaLocalService {
                         </div>
                         
                         <form id="add-model-form">
-                            <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+                            <div class="form-grid-2col" style="gap: 1.5rem; margin-top: 1rem;">
                                 <div class="input-group">
                                     <label for="form-model-name">Model Name *</label>
                                     <input type="text" id="form-model-name" placeholder="e.g. My-Llama-FineTune-3" required>
@@ -1153,14 +1159,14 @@ class LlamaLocalService {
                                 </div>
                             </div>
                             
-                            <div class="grid-layout" style="grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-grid-1col" style="gap: 1.5rem; margin-top: 1.5rem;">
                                 <div class="input-group">
                                     <label for="form-model-desc">Model Description *</label>
                                     <textarea id="form-model-desc" rows="4" placeholder="Brief explanation of the model architecture, how it was trained, and key capabilities..." required></textarea>
                                 </div>
                             </div>
 
-                            <div class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div class="form-grid-2col" style="gap: 1.5rem; margin-top: 1.5rem;">
                                 <div class="input-group">
                                     <label for="form-model-input-price">Input Token Price (per 1M tokens)</label>
                                     <input type="text" id="form-model-input-price" placeholder="e.g. $0.00 or $0.075">
@@ -1186,7 +1192,7 @@ class LlamaLocalService {
                         <p class="subtitle">Stay updated with newly launched LLMs and SLMs in the AI ecosystem. Read their layperson highlights and import them directly into your comparison matrix.</p>
                     </div>
                     
-                    <div class="market-grid" id="market-feed-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+                    <div id="market-feed-container" class="responsive-card-grid">
                         <!-- Dynamic release feed cards loaded from js -->
                     </div>
                 </section>

@@ -62,6 +62,57 @@ body {
     position: relative;
 }
 
+/* SIDEBAR MOBILE BUTTONS */
+.sidebar-toggle-btn {
+    display: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 0.6rem;
+    border-radius: 10px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-toggle-btn i {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.sidebar-close-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    z-index: 110;
+}
+
+.sidebar-close-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-close-btn i {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
 /* SIDEBAR NAVIGATION */
 .sidebar {
     width: var(--sidebar-width);
@@ -285,6 +336,24 @@ body {
 
 .glass-card:hover {
     border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* RESPONSIVE CARD GRIDS */
+.responsive-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-grid-1col {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
 /* GRID LAYOUTS */
@@ -566,6 +635,14 @@ body {
     display: flex;
     border-bottom: 1px solid var(--border-color);
     gap: 1.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.detail-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .detail-tab {
@@ -578,6 +655,7 @@ body {
     padding-bottom: 0.75rem;
     cursor: pointer;
     position: relative;
+    flex-shrink: 0;
     transition: var(--transition-fast);
 }
 
@@ -1303,6 +1381,14 @@ code {
     display: flex;
     border-bottom: 1px solid var(--border-color);
     gap: 1.25rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.recipe-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .recipe-tab {
@@ -1316,6 +1402,7 @@ code {
     cursor: pointer;
     position: relative;
     transition: var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .recipe-tab.active {
@@ -1513,6 +1600,14 @@ code {
     border-radius: 12px;
     padding: 0.4rem;
     margin-bottom: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.integration-main-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .integration-tab {
@@ -1523,10 +1618,11 @@ code {
     font-family: var(--font-sans);
     font-size: 0.9rem;
     font-weight: 600;
-    padding: 0.6rem 0;
+    padding: 0.6rem 1.25rem;
     cursor: pointer;
     border-radius: 8px;
     transition: var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .integration-tab.active {
@@ -1695,13 +1791,25 @@ code {
     }
     
     .sidebar {
+        width: 280px;
         transform: translateX(-100%);
-        transition: transform 0.3s;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .sidebar.open {
         transform: translateX(0);
-        width: 250px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.15);
+    }
+    
+    .sidebar-close-btn {
+        display: flex;
+        position: absolute;
+        top: 2rem;
+        right: 1.5rem;
+    }
+    
+    .sidebar-toggle-btn {
+        display: flex;
     }
     
     .main-content {
@@ -1709,7 +1817,16 @@ code {
     }
     
     .top-header {
-        padding: 0 1.5rem;
+        height: auto;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: flex-start;
+    }
+    
+    .system-status {
+        margin-left: auto;
     }
     
     .content-body {
@@ -1949,6 +2066,57 @@ code {
 @media (max-width: 640px) {
     .roadmap-step-btn {
         width: calc(33.3% - 0.4rem);
+    }
+    
+    .form-grid-2col {
+        grid-template-columns: 1fr;
+    }
+    
+    .rec-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .roadmap-step-btn {
+        width: calc(50% - 0.4rem);
+    }
+    
+    .metrics-strip {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .top-header {
+        height: auto;
+        padding: 1rem 1.5rem;
+    }
+    
+    .system-status {
+        display: none;
+    }
+    
+    .timeline {
+        padding-left: 2rem;
+    }
+    
+    .timeline::before {
+        left: 12px;
+    }
+    
+    .step-num {
+        left: -34px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    .header-title-wrapper h2 {
+        font-size: 1.25rem;
+    }
+    
+    .header-title-wrapper .subtitle {
+        font-size: 0.75rem;
     }
 }
 

@@ -325,6 +325,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Setup News Hub
     setupNewsHub();
 
+    // Setup Mobile Sidebar toggles
+    setupMobileSidebar();
+
     // Load initial model details
     displayModelDetails(allModels[0]);
 });
@@ -3453,6 +3456,44 @@ function triggerAutoNewsFetch() {
         hasFetchedLiveNews = true;
         fetchLiveNewsUpdates();
     }
+}
+
+// MOBILE SIDEBAR TOGGLE LOGIC
+function setupMobileSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    const toggleBtn = document.getElementById("sidebar-toggle");
+    const closeBtn = document.getElementById("sidebar-close");
+    const navItems = document.querySelectorAll(".nav-item");
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            sidebar.classList.add("open");
+        });
+    }
+
+    if (closeBtn && sidebar) {
+        closeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            sidebar.classList.remove("open");
+        });
+    }
+
+    // Auto close when nav item clicked
+    navItems.forEach(item => {
+        item.addEventListener("click", () => {
+            if (sidebar) sidebar.classList.remove("open");
+        });
+    });
+
+    // Close when clicking outside sidebar
+    document.addEventListener("click", (e) => {
+        if (sidebar && sidebar.classList.contains("open")) {
+            if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+                sidebar.classList.remove("open");
+            }
+        }
+    });
 }
 
 
