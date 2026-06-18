@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        (function () {
+            var saved = localStorage.getItem('modelverse-theme');
+            if (saved === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelVerse - LLM & SLM Hub for Developers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/config.js"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Vercel Analytics -->
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <button id="sidebar-close" class="sidebar-close-btn" aria-label="Close menu">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i data-lucide="brain-circuit"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ModelVerse</h1>
+                    <span>LLM & SLM Compass</span>
+                </div>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#ai-glossary" class="nav-item active" data-tab="ai-glossary">
+                    <i data-lucide="book-open"></i>
+                    <span>AI/ML Glossary</span>
+                </a>
+                <a href="#model-finder" class="nav-item" data-tab="model-finder">
+                    <i data-lucide="search"></i>
+                    <span>Model Finder</span>
+                </a>
+                <a href="#decision-wizard" class="nav-item" data-tab="decision-wizard">
+                    <i data-lucide="git-branch"></i>
+                    <span>Decision Wizard</span>
+                </a>
+                <a href="#training-guide" class="nav-item" data-tab="training-guide">
+                    <i data-lucide="cpu"></i>
+                    <span>How to Train</span>
+                </a>
+                <a href="#token-playground" class="nav-item" data-tab="token-playground">
+                    <i data-lucide="calculator"></i>
+                    <span>Token Playground</span>
+                </a>
+                <a href="#flutter-integration" class="nav-item" data-tab="flutter-integration">
+                    <i data-lucide="smartphone"></i>
+                    <span>Flutter Integration</span>
+                </a>
+                <a href="#comparison-matrix" class="nav-item" data-tab="comparison-matrix">
+                    <i data-lucide="table"></i>
+                    <span>Comparison Matrix</span>
+                </a>
+                <a href="#add-model" class="nav-item" data-tab="add-model" style="display: none;">
+                    <i data-lucide="plus-circle"></i>
+                    <span>Add Model</span>
+                </a>
+                <a href="#market-feed" class="nav-item" data-tab="market-feed" style="display: none;">
+                    <i data-lucide="trending-up"></i>
+                    <span>Market Trends</span>
+                </a>
+                <a href="#news-hub" class="nav-item" data-tab="news-hub">
+                    <i data-lucide="rss"></i>
+                    <span>AI News Hub</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Designed for Flutter Devs</p>
+                <div class="badge">AI/ML Simplified</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Open menu">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="header-title-wrapper">
+                    <h2 id="page-title">Model Search & Specs</h2>
+                    <p id="page-subtitle" class="subtitle">Search, inspect, and analyze any LLM or SLM for your next application</p>
+                </div>
+                <div class="system-status">
+                    <div class="status-indicator online"></div>
+                    <span>Hugging Face API connected</span>
+                </div>
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle light/dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="content-body">
+                
+                <!-- SECTION 0: AI/ML GLOSSARY -->
+                <section id="ai-glossary-sec" class="content-section active">
+                    <div class="card glass-card" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <h3>AI/ML Selection Glossary</h3>
+                            <p class="subtitle">Understand core terminology before choosing or configuring models for your applications. Study this guide to make informed selection choices.</p>
+                        </div>
+                        
+                        <!-- Glossary Roadmap Steps Guide -->
+                        <div class="roadmap-guide-container" style="display: flex; flex-direction: column; gap: 0.75rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+                            <span style="font-size: 0.8rem; font-weight: 600; color: var(--secondary-light); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.35rem;">
+                                <i data-lucide="map" style="width: 14px; height: 14px;"></i> Interactive Learning Roadmap Path
+                            </span>
+                            <div class="roadmap-steps-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 0.35rem; flex-wrap: wrap; background: var(--overlay-02); border: 1px solid var(--border-color); padding: 0.5rem; border-radius: 12px; width: 100%;">
+                                <button class="roadmap-step-btn active" data-step="all">All Steps</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="1">Step 1</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="2">Step 2</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="3">Step 3</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="4">Step 4</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="5">Step 5</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="6">Step 6</button>
+                                <div class="roadmap-connector"></div>
+                                <button class="roadmap-step-btn" data-step="7">Step 7</button>
+                            </div>
+                            <div id="roadmap-step-desc-box" style="font-size: 0.85rem; color: var(--text-secondary); background: rgba(139, 92, 246, 0.05); border-left: 3px solid var(--primary); padding: 0.75rem 1rem; border-radius: 0 8px 8px 0; min-height: 48px; display: flex; align-items: center;">
+                                Follow the guided roadmap step-by-step to learn AI/ML terminologies in a logical flow from basics to system customization.
+                            </div>
+                        </div>
+                        
+                        <!-- Glossary Controls -->
+                        <div class="glossary-controls" style="display: flex; flex-direction: column; gap: 1rem; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+                            <!-- Search -->
+                            <div class="search-container-wrapper" style="width: 100%; max-width: none;">
+                                <i data-lucide="search" class="search-icon"></i>
+                                <input type="text" id="glossary-search-input" placeholder="Search glossary terms (e.g. quantization, GQA, MoE, MMLU, temperature)..." autocomplete="off" style="width: 100%;">
+                                <button id="glossary-clear-btn" class="clear-btn"><i data-lucide="x"></i></button>
+                            </div>
+                            
+                            <!-- Category Filter Chips -->
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Filter by Category</span>
+                                <div id="glossary-filter-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <!-- Loaded dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="glossary-grid" class="responsive-card-grid">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- SECTION 1: MODEL FINDER -->
+                <section id="model-finder-sec" class="content-section">
+                    <div class="search-hero">
+                        <div class="search-container-wrapper">
+                            <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="model-search-input" placeholder="Type a model name (e.g. gemma, gpt-4o, llama-3-8b, or custom repository)..." autocomplete="off">
+                            <button id="search-clear-btn" class="clear-btn"><i data-lucide="x"></i></button>
+                            <button id="search-action-btn" class="search-btn">Search Hub</button>
+                        </div>
+                        <div class="search-tags">
+                            <span class="tag-label">Popular Models:</span>
+                            <button class="search-tag" data-query="gemini-1.5-pro">Gemini 1.5 Pro</button>
+                            <button class="search-tag" data-query="gemma-2b">Gemma 2B</button>
+                            <button class="search-tag" data-query="llama-3-8b">Llama 3 8B</button>
+                            <button class="search-tag" data-query="phi-3">Phi-3 Mini</button>
+                            <button class="search-tag" data-query="gpt-4o">GPT-4o</button>
+                        </div>
+                        <div class="search-tags" style="margin-top: 0.75rem;">
+                            <span class="tag-label">Use Cases:</span>
+                            <button class="search-tag usecase-tag" data-query="video" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.02); color: var(--secondary-light);">🎬 Video & Multimodal</button>
+                            <button class="search-tag usecase-tag" data-query="image" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.02); color: var(--secondary-light);">📸 Image & Vision</button>
+                            <button class="search-tag usecase-tag" data-query="code" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.02); color: var(--secondary-light);">💻 Coding Helper</button>
+                            <button class="search-tag usecase-tag" data-query="offline" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.02); color: var(--secondary-light);">🛜 Offline & Local</button>
+                            <button class="search-tag usecase-tag" data-query="cheap" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.02); color: var(--secondary-light);">💰 Free & Low Cost</button>
+                        </div>
+                    </div>
+
+                    <!-- Search Results Grid -->
+                    <div id="search-status-bar" class="search-status hidden">
+                        <span class="status-text">Searching Hugging Face Hub...</span>
+                        <div class="spinner"></div>
+                    </div>
+
+                    <!-- Search Recommendations Box -->
+                    <div id="search-recommendation-box" class="search-status hidden" style="background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.25); color: var(--secondary-light); flex-direction: column; align-items: flex-start; gap: 0.5rem; width: 100%;">
+                        <div style="font-weight: 600; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="sparkles" style="width:16px;height:16px;color:var(--secondary-light);"></i> Recommended Models for "<span id="rec-keyword" style="color:white;"></span>":</div>
+                        <div id="rec-models-list" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.25rem; width: 100%;">
+                            <!-- Recommended models loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="grid-layout">
+                        <!-- Model Details Card -->
+                        <div class="card glass-card main-detail-card" id="detail-card">
+                            <div class="detail-header">
+                                <div class="detail-badge-row">
+                                    <span id="model-category-badge" class="badge-category llm">Large Language Model (LLM)</span>
+                                    <span id="model-license-badge" class="badge-license">Proprietary</span>
+                                </div>
+                                <h3 id="detail-model-name">Gemini 1.5 Pro</h3>
+                                <p id="detail-model-creator" class="creator-text">Google Developer AI</p>
+                                <div id="model-capabilities-row" style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.75rem;">
+                                    <!-- Loaded dynamically -->
+                                </div>
+                            </div>
+
+                            <div class="metrics-strip">
+                                <div class="metric-item">
+                                    <span class="metric-label">Parameters</span>
+                                    <span class="metric-val" id="val-parameters">N/A (Multi-Expert)</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">MMLU Accuracy</span>
+                                    <span class="metric-val" id="val-accuracy">90.8%</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Context Window</span>
+                                    <span class="metric-val" id="val-context">2M tokens</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Running Cost</span>
+                                    <span class="metric-val" id="val-cost">Paid / Free tier</span>
+                                </div>
+                            </div>
+
+                            <div class="detail-tabs-container">
+                                <div class="detail-tabs">
+                                    <button class="detail-tab active" data-tab="about">Overview (Layperson)</button>
+                                    <button class="detail-tab" data-tab="specs">Technical Specs (Developer)</button>
+                                    <button class="detail-tab" data-tab="pricing">Pricing & Cost</button>
+                                    <button class="detail-tab" data-tab="deployment">Deployment (Mobile/Web/Docker)</button>
+                                    <button class="detail-tab" data-tab="deepdive">Deep Dive (Advanced)</button>
+                                </div>
+                                
+                                <div class="detail-tab-content active" id="tab-content-about">
+                                    <h4 class="section-subheading">Simple Explanation (What is it?)</h4>
+                                    <p class="description-p" id="model-description">Loading description...</p>
+                                    
+                                    <div class="analogy-card" style="background: rgba(6, 182, 212, 0.03); border-left: 4px solid var(--secondary); padding: 1.25rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                                        <h5 style="color: var(--secondary-light); margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="lightbulb" style="width:16px;height:16px;"></i> Simple Analogy</h5>
+                                        <p id="model-analogy" style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); margin: 0;"></p>
+                                    </div>
+
+                                    <h4 class="section-subheading">What Data was it Trained On?</h4>
+                                    <p class="description-p" id="model-training-data" style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;"></p>
+
+                                    <h4 class="section-subheading">Key Everyday Use Cases</h4>
+                                    <ul class="bullet-list" id="model-use-cases">
+                                        <!-- Loaded dynamically -->
+                                    </ul>
+                                </div>
+
+                                <div class="detail-tab-content" id="tab-content-specs">
+                                    <div class="spec-grid">
+                                        <div class="spec-card">
+                                            <i data-lucide="database"></i>
+                                            <div>
+                                                <h5>Model Architecture</h5>
+                                                <p id="spec-arch">Mixture-of-Experts (MoE)</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="zap"></i>
+                                            <div>
+                                                <h5>Inference Latency</h5>
+                                                <p id="spec-latency">Medium (~40-60 tokens/sec)</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="hard-drive"></i>
+                                            <div>
+                                                <h5>Recommended Hardware</h5>
+                                                <p id="spec-hardware">Cloud TPU v5e/v5p cluster (Cloud API)</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="layers"></i>
+                                            <div>
+                                                <h5>Quantization Options</h5>
+                                                <p id="spec-quantization">Not applicable (Cloud Service)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-subheading" style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Key Evaluation Benchmarks</h4>
+                                    <div class="benchmark-grid" id="benchmark-bars-container" style="display: flex; flex-direction: column; gap: 0.85rem; background: var(--overlay-02); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 8px;">
+                                        <!-- Dynamic benchmark progress bars -->
+                                    </div>
+                                </div>
+
+                                <div class="detail-tab-content" id="tab-content-pricing">
+                                    <div class="pricing-comparison">
+                                        <div class="price-box input-price">
+                                            <div class="price-title">Input Token Pricing</div>
+                                            <div class="price-amount" id="price-input">$1.25 <span class="unit">/ 1M tokens</span></div>
+                                            <p class="price-note" id="price-input-note">(or Free in AI Studio up to 15 RPM)</p>
+                                        </div>
+                                        <div class="price-box output-price">
+                                            <div class="price-title">Output Token Pricing</div>
+                                            <div class="price-amount" id="price-output">$5.00 <span class="unit">/ 1M tokens</span></div>
+                                            <p class="price-note" id="price-output-note">(or Free in AI Studio up to 15 RPM)</p>
+                                        </div>
+                                    </div>
+                                    <p class="pricing-alert-box info">
+                                        <i data-lucide="info"></i>
+                                        <span>This model features a free-tier rate limit in Google AI Studio, making it free for development and low-volume production!</span>
+                                    </p>
+                                </div>
+
+                                <div class="detail-tab-content" id="tab-content-deepdive">
+                                    <div class="spec-grid" style="margin-bottom: 1.5rem;">
+                                        <div class="spec-card">
+                                            <i data-lucide="shield-check"></i>
+                                            <div>
+                                                <h5>Safety & Alignment</h5>
+                                                <p id="dive-safety">Loading...</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="cpu"></i>
+                                            <div>
+                                                <h5>Attention Mechanism</h5>
+                                                <p id="dive-attention">Loading...</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="history"></i>
+                                            <div>
+                                                <h5>Training Corpus Size</h5>
+                                                <p id="dive-corpus">Loading...</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card">
+                                            <i data-lucide="scale"></i>
+                                            <div>
+                                                <h5>Commercial Licensing</h5>
+                                                <p id="dive-limits">Loading...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-subheading" style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Device Latency & Inference Benchmarks</h4>
+                                    <div class="spec-grid" style="margin-bottom: 1.5rem;">
+                                        <div class="spec-card" style="background: var(--overlay-015);">
+                                            <i data-lucide="smartphone" style="color: var(--secondary-light);"></i>
+                                            <div>
+                                                <h5>iPhone 15 Pro / Mobile CPU</h5>
+                                                <p id="perf-iphone">Loading...</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card" style="background: var(--overlay-015);">
+                                            <i data-lucide="zap" style="color: var(--primary-light);"></i>
+                                            <div>
+                                                <h5>NVIDIA RTX 4090 GPU</h5>
+                                                <p id="perf-rtx">Loading...</p>
+                                            </div>
+                                        </div>
+                                        <div class="spec-card" style="background: var(--overlay-015);">
+                                            <i data-lucide="laptop" style="color: var(--primary-light);"></i>
+                                            <div>
+                                                <h5>Apple Silicon M3 Max Mac</h5>
+                                                <p id="perf-mac">Loading...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="section-subheading" style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Quantization Matrix (FP16 vs. INT4 Footprint)</h4>
+                                    <div style="overflow-x: auto; background: var(--overlay-02); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                                        <table class="matrix-table" style="width: 100%; min-width: 600px; font-size: 0.8rem; border-collapse: collapse; text-align: left;">
+                                            <thead>
+                                                <tr style="border-bottom: 1px solid var(--border-color); color: var(--heading-color);">
+                                                    <th style="padding: 0.5rem;">Quant Format</th>
+                                                    <th style="padding: 0.5rem;">Precision</th>
+                                                    <th style="padding: 0.5rem;">File Size</th>
+                                                    <th style="padding: 0.5rem;">Min RAM Required</th>
+                                                    <th style="padding: 0.5rem;">Quality/Accuracy Loss</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="quant-matrix-body">
+                                                <!-- Populated dynamically -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="detail-tab-content" id="tab-content-deployment">
+                                    <div class="recipe-container">
+                                        <div class="recipe-tabs" style="margin-bottom: 1.25rem;">
+                                             <button class="deploy-sub-tab active" data-deploy="mobile">Mobile (Flutter)</button>
+                                             <button class="deploy-sub-tab" data-deploy="web">Web Browser (JS / WebGPU)</button>
+                                             <button class="deploy-sub-tab" data-deploy="docker">Docker Self-Hosting</button>
+                                        </div>
+                                        
+                                        <!-- Mobile Sub-tab -->
+                                        <div class="deploy-content active" id="deploy-content-mobile">
+                                             <p class="flutter-guide-desc" id="deploy-mobile-intro">Load and run locally or via API on iOS and Android devices:</p>
+                                             <div class="code-header">
+                                                 <span>pubspec.yaml</span>
+                                                 <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                             </div>
+                                             <pre><code class="language-yaml" id="deploy-mobile-pub">dependencies:
+  google_generative_ai: ^0.4.0</code></pre>
+                                             <div class="code-header">
+                                                 <span>Mobile Implementation</span>
+                                                 <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                             </div>
+                                             <pre><code class="language-dart" id="deploy-mobile-code">// Dart code goes here</code></pre>
+                                        </div>
+                                        
+                                        <!-- Web Sub-tab -->
+                                        <div class="deploy-content" id="deploy-content-web">
+                                             <p class="flutter-guide-desc">Run inside a web application using client-side JavaScript (using cloud API or local Transformers.js/WebGPU):</p>
+                                             <div class="code-header">
+                                                 <span>index.html / script.js</span>
+                                                 <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                             </div>
+                                             <pre><code class="language-javascript" id="deploy-web-code">// Javascript code goes here</code></pre>
+                                        </div>
+                                        
+                                        <!-- Docker Sub-tab -->
+                                        <div class="deploy-content" id="deploy-content-docker">
+                                             <p class="flutter-guide-desc">Self-host this model on private cloud servers or local systems using containerized environments:</p>
+                                             <div class="code-header">
+                                                 <span>Docker & Ollama / vLLM Commands</span>
+                                                 <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                             </div>
+                                             <pre><code class="language-bash" id="deploy-docker-code">// Docker run commands go here</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Info Cards -->
+                        <div class="finder-sidebar">
+                            <div class="card glass-card info-card">
+                                <h4><i data-lucide="help-circle"></i> What are LLMs vs SLMs?</h4>
+                                <div class="quick-compare-list">
+                                    <div class="quick-compare-item">
+                                        <div class="item-title text-purple">LLMs (Large Language Models)</div>
+                                        <p>Massive cloud-based neural networks (typically 30B to 1000B+ parameters). Extremely smart, high reasoning capacity, but require high-end GPU servers and paid API queries.</p>
+                                    </div>
+                                    <div class="quick-compare-item">
+                                        <div class="item-title text-cyan">SLMs (Small Language Models)</div>
+                                        <p>Compact, highly optimized models (typically 1B to 9B parameters). Capable of running locally on consumer smartphones, web browsers, or laptops. Ideal for privacy and offline usage.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card info-card memory-spec-card">
+                                <h4><i data-lucide="hard-drive"></i> Mobile Device RAM Calculator</h4>
+                                <p class="small-text">How much RAM does a device need to run a Small Language Model (SLM) locally?</p>
+                                <div class="calculator-inputs">
+                                    <div class="input-group">
+                                        <label for="calc-params">Model Size (Billion parameters):</label>
+                                        <input type="number" id="calc-params" value="2.5" min="0.5" max="30" step="0.1">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="calc-quant">Quantization Level:</label>
+                                        <select id="calc-quant">
+                                            <option value="16">16-bit (FP16 - Uncompressed)</option>
+                                            <option value="8">8-bit (INT8 - Semi-compressed)</option>
+                                            <option value="4" selected>4-bit (INT4 - Highly compressed)</option>
+                                            <option value="3">3-bit (INT3 - Ultra compressed)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="calculator-results">
+                                    <div class="res-row">
+                                        <span>Model Weight Size:</span>
+                                        <strong id="calc-weight-size">1.25 GB</strong>
+                                    </div>
+                                    <div class="res-row">
+                                        <span>Required Runtime RAM:</span>
+                                        <strong id="calc-ram-required" class="text-cyan">~1.75 GB</strong>
+                                    </div>
+                                    <div class="res-row">
+                                        <span>Target Mobile Compatibility:</span>
+                                        <strong id="calc-compatibility" class="text-success">Supported (Most Devices)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: DECISION WIZARD -->
+                <section id="decision-wizard-sec" class="content-section">
+                    <div class="wizard-container card glass-card">
+                        <div class="wizard-header">
+                            <h3>Architecture Decision Engine</h3>
+                            <p>Answer a few questions about your Flutter project, and we will recommend whether to build with a cloud-based LLM API or an on-device local SLM.</p>
+                        </div>
+                        
+                        <div class="wizard-steps-indicators">
+                            <div class="step-indicator active" data-step="1">1. Environment</div>
+                            <div class="step-indicator" data-step="2">2. Budget</div>
+                            <div class="step-indicator" data-step="3">3. Capability</div>
+                            <div class="step-indicator" data-step="4">4. Recommendation</div>
+                        </div>
+
+                        <!-- Wizard Step Content -->
+                        <div class="wizard-body">
+                            <!-- Step 1 -->
+                            <div class="wizard-step active" id="wizard-step-1">
+                                <h4>Does your mobile application need to work offline?</h4>
+                                <div class="option-grid">
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-offline" value="yes">
+                                        <div class="option-content">
+                                            <i data-lucide="wifi-off"></i>
+                                            <h5>Yes, offline-first</h5>
+                                            <p>Needs to perform text tasks or chat when completely disconnected from cellular or Wi-Fi networks.</p>
+                                        </div>
+                                    </label>
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-offline" value="no" checked>
+                                        <div class="option-content">
+                                            <i data-lucide="wifi"></i>
+                                            <h5>No, internet is fine</h5>
+                                            <p>Our users always have active internet access when using these specific app features.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div class="wizard-step" id="wizard-step-2">
+                                <h4>What is your cost and privacy constraint?</h4>
+                                <div class="option-grid">
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-budget" value="free" checked>
+                                        <div class="option-content">
+                                            <i data-lucide="piggy-bank"></i>
+                                            <h5>Zero Server Cost / Extreme Privacy</h5>
+                                            <p>Cannot afford monthly API bills. Also, user data must NEVER leave the phone due to strict security rules.</p>
+                                        </div>
+                                    </label>
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-budget" value="paid">
+                                        <div class="option-content">
+                                            <i data-lucide="credit-card"></i>
+                                            <h5>Flexible Budget / Standard API Rules</h5>
+                                            <p>Willing to pay API token costs. Sending data to cloud endpoints (with secure privacy policies) is acceptable.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="wizard-step" id="wizard-step-3">
+                                <h4>What level of intelligence/reasoning does the task require?</h4>
+                                <div class="option-grid">
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-reasoning" value="simple" checked>
+                                        <div class="option-content">
+                                            <i data-lucide="message-square"></i>
+                                            <h5>Simple / Specific Tasks</h5>
+                                            <p>Autocompletion, text classification, grammar correction, basic chat responses, or simple forms extraction.</p>
+                                        </div>
+                                    </label>
+                                    <label class="wizard-option">
+                                        <input type="radio" name="wiz-reasoning" value="complex">
+                                        <div class="option-content">
+                                            <i data-lucide="award"></i>
+                                            <h5>Complex Reasoning & Coding</h5>
+                                            <p>Solving complex math, software engineering, long-context documents parsing, high-precision translation, or logic puzzles.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="wizard-step" id="wizard-step-4">
+                                <div class="recommendation-result">
+                                    <div class="rec-icon-wrapper">
+                                        <i data-lucide="cpu" class="rec-icon text-cyan"></i>
+                                    </div>
+                                    <h4 id="rec-headline">We recommend: On-Device SLM (Local Execution)</h4>
+                                    <p id="rec-explanation">Because your app requires offline functionality and zero API operational costs, running a quantized local model on the client side is the best architectural fit.</p>
+                                    
+                                    <div class="rec-details-grid">
+                                        <div class="rec-metric-card">
+                                            <h5>Architectural Path</h5>
+                                            <p id="rec-path">On-Device Runtime (MediaPipe/llama.cpp)</p>
+                                        </div>
+                                        <div class="rec-metric-card">
+                                            <h5>Suggested Model</h5>
+                                            <p id="rec-model">Gemma-2-2B (INT4 quantized)</p>
+                                        </div>
+                                        <div class="rec-metric-card">
+                                            <h5>Estimated Memory</h5>
+                                            <p id="rec-memory">~1.5 GB - 1.8 GB RAM</p>
+                                        </div>
+                                        <div class="rec-metric-card">
+                                            <h5>Estimated Billing</h5>
+                                            <p id="rec-cost">$0.00 / month (Fully free)</p>
+                                        </div>
+                                    </div>
+
+                                    <button class="action-btn next-btn" id="go-to-guide-btn">View Implementation Guide</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wizard-footer">
+                            <button class="btn btn-secondary" id="wiz-prev-btn" disabled>Back</button>
+                            <button class="btn btn-primary" id="wiz-next-btn">Next Step</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: HOW TO TRAIN & CREATE -->
+                <section id="training-guide-sec" class="content-section">
+                    <div class="grid-layout flex-column">
+                        
+                        <!-- Pipeline Overview -->
+                        <div class="card glass-card">
+                            <h3>The Lifecycle of a Custom Language Model</h3>
+                            <p class="subtitle">How a model transitions from raw text into a smart AI on your phone</p>
+                            
+                            <div class="timeline">
+                                <div class="timeline-step">
+                                    <div class="step-num">1</div>
+                                    <div class="step-content">
+                                        <h4>1. Pre-Training (Self-Supervised)</h4>
+                                        <p>A huge neural network reads trillions of words of web content. Its sole task is to predict the next word. It gains general grammar, world facts, and language skills, but cannot follow instructions yet. This costs millions of dollars in compute.</p>
+                                        <span class="tool-tag">PyTorch</span><span class="tool-tag">TensorFlow</span><span class="tool-tag">1000s of H100 GPUs</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-num">2</div>
+                                    <div class="step-content">
+                                        <h4>2. Fine-Tuning (SFT - Supervised Fine-Tuning)</h4>
+                                        <p>You train the pre-trained base model on clean, curated instructions. For example, prompt-response pairs: <code>{"prompt": "Translate 'hello' to Spanish", "response": "Hola"}</code>. This teaches the model to listen and act as an assistant.</p>
+                                        <span class="tool-tag">LLaMA-Factory</span><span class="tool-tag">Unsloth</span><span class="tool-tag">Hugging Face Transformers</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-num">3</div>
+                                    <div class="step-content">
+                                        <h4>3. Alignment (RLHF / DPO)</h4>
+                                        <p>Human annotators rate model outputs. Direct Preference Optimization (DPO) or Reinforcement Learning from Human Feedback (RLHF) updates model weights so that outputs align with safety, tone, helpfulness, and style standards.</p>
+                                        <span class="tool-tag">TRL Library</span><span class="tool-tag">RLHF Annotators</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-num">4</div>
+                                    <div class="step-content">
+                                        <h4>4. Quantization (Compression)</h4>
+                                        <p>Raw model weights are in 16-bit floats (FP16), which is too large for phones. Quantization maps these float values to smaller 4-bit or 8-bit integers (INT4/INT8). A 7B parameter model shrinks from 14GB down to 3.8GB, fitting on a phone with minor loss in accuracy.</p>
+                                        <span class="tool-tag">llama.cpp</span><span class="tool-tag">AutoGPTQ</span><span class="tool-tag">GGUF format</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Training Cost Estimator & Steps -->
+                        <div class="grid-layout">
+                            <div class="card glass-card">
+                                <h3>Fine-Tuning Cost & GPU Calculator</h3>
+                                <p class="subtitle">Estimate what you need to fine-tune your custom model</p>
+                                
+                                <div class="calculator-inputs">
+                                    <div class="input-group">
+                                        <label for="train-dataset-size">Dataset Size (Number of Conversations):</label>
+                                        <input type="number" id="train-dataset-size" value="5000" min="100" max="1000000" step="500">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="train-base-model">Base Model to Tune:</label>
+                                        <select id="train-base-model">
+                                            <option value="gemma-2b" selected>Gemma-2-2B (Local SLM)</option>
+                                            <option value="llama3-8b">Llama-3-8B (Mid-size SLM)</option>
+                                            <option value="mistral-7b">Mistral-7B (Mid-size SLM)</option>
+                                            <option value="llama3-70b">Llama-3-70B (Large LLM)</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="train-method">Training Method:</label>
+                                        <select id="train-method">
+                                            <option value="qlora" selected>QLoRA (4-bit Efficient - Recommended)</option>
+                                            <option value="lora">LoRA (16-bit Adaptor)</option>
+                                            <option value="full">Full Parameter Fine-Tuning (Expensive)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="calculator-results">
+                                    <div class="res-row">
+                                        <span>Recommended GPU:</span>
+                                        <strong id="train-gpu-rec" class="text-cyan">NVIDIA RTX 4090 / A10G</strong>
+                                    </div>
+                                    <div class="res-row">
+                                        <span>Estimated RAM Required:</span>
+                                        <strong id="train-vram-required">~16 GB VRAM</strong>
+                                    </div>
+                                    <div class="res-row">
+                                        <span>Estimated Training Time:</span>
+                                        <strong id="train-time">~1.2 hours (at 3 epochs)</strong>
+                                    </div>
+                                    <div class="res-row">
+                                        <span>Estimated Cloud Compute Cost:</span>
+                                        <strong id="train-cost-est" class="text-success">~$2.50 (RunPod/Vast.ai)</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card glass-card">
+                                <h3>Step-by-Step Training Recipe</h3>
+                                <div class="recipe-container">
+                                    <div class="recipe-tabs">
+                                        <button class="recipe-tab active" data-recipe="data">1. Data Format</button>
+                                        <button class="recipe-tab" data-recipe="tune">2. Fine-Tune Code</button>
+                                        <button class="recipe-tab" data-recipe="quant">3. Quantize to GGUF</button>
+                                    </div>
+                                    
+                                    <div class="recipe-content active" id="recipe-content-data">
+                                        <p class="recipe-text">Create an instruction dataset in JSONL format. Each line represents a training sample with system instructions, user prompts, and expected outputs.</p>
+                                        <div class="code-header">
+                                            <span>dataset.jsonl</span>
+                                            <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                        </div>
+                                        <pre><code class="language-json">{"messages": [{"role": "system", "content": "You are a helpful customer assistant."}, {"role": "user", "content": "How do I return an item?"}, {"role": "assistant", "content": "You can return any item within 30 days of purchase by visiting our returns center..."}]}
+{"messages": [{"role": "system", "content": "You are a helpful customer assistant."}, {"role": "user", "content": "Track order #104"}, {"role": "assistant", "content": "Your order #104 has been shipped and is scheduled for delivery tomorrow..."}]}</code></pre>
+                                    </div>
+
+                                    <div class="recipe-content" id="recipe-content-tune">
+                                        <p class="recipe-text">Use the <strong>Unsloth</strong> framework in a Google Colab notebook for extremely fast, low-memory LoRA fine-tuning:</p>
+                                        <div class="code-header">
+                                            <span>train.py (Python)</span>
+                                            <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                        </div>
+                                        <pre><code class="language-python">from unsloth import FastLanguageModel
+import torch
+
+# Load model fast!
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = "unsloth/gemma-2-2b-it",
+    max_seq_length = 2048,
+    load_in_4bit = True, # QLoRA
+)
+
+# Set up LoRA Adaptors
+model = FastLanguageModel.get_peft_model(
+    model,
+    r = 16, # Rank
+    target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    lora_alpha = 16,
+    lora_dropout = 0,
+)
+
+# (Next step: run SFTTrainer using Hugging Face datasets)</code></pre>
+                                    </div>
+
+                                    <div class="recipe-content" id="recipe-content-quant">
+                                        <p class="recipe-text">Convert your trained weights into <code>GGUF</code> format (used by llama.cpp and mobile loaders) and compress to 4-bit:</p>
+                                        <div class="code-header">
+                                            <span>Terminal (using llama.cpp)</span>
+                                            <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                                        </div>
+                                        <pre><code class="language-bash"># 1. Install llama.cpp dependencies
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp && make
+
+# 2. Convert PyTorch model to unquantized GGUF
+python3 convert_hf_to_gguf.py /path/to/my_fine_tuned_model --outfile model-f16.gguf
+
+# 3. Quantize weights to 4-bit (Q4_K_M)
+./llama-quantize model-f16.gguf model-q4_k_m.gguf Q4_K_M</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 4: PLAYGROUND -->
+                <section id="token-playground-sec" class="content-section">
+                    <div class="grid-layout">
+                        <!-- Play area -->
+                        <div class="card glass-card">
+                            <h3>Token & API Pricing Playground</h3>
+                            <p class="subtitle">Type a prompt to visualize how tokenization works, and calculate the cost across different models.</p>
+                            
+                            <div class="playground-inputs">
+                                <div class="input-group">
+                                    <label for="play-model-select">Choose Reference Model:</label>
+                                    <select id="play-model-select">
+                                        <option value="gemini-flash" selected>Gemini 1.5 Flash ($0.075/1M input, $0.30/1M output)</option>
+                                        <option value="gemini-pro">Gemini 1.5 Pro ($1.25/1M input, $5.00/1M output)</option>
+                                        <option value="gpt-4o">GPT-4o ($5.00/1M input, $15.00/1M output)</option>
+                                        <option value="claude-35-sonnet">Claude 3.5 Sonnet ($3.00/1M input, $15.00/1M output)</option>
+                                        <option value="local-slm">Local SLM (Gemma/Llama) ($0.00 - Runs on device!)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="play-prompt">Enter Prompt:</label>
+                                    <textarea id="play-prompt" rows="6" placeholder="Type or paste your prompt here to see tokens in action...">Hello! I am building a Flutter app and I want to run a local language model. Can Gemma 2B do code generation offline?</textarea>
+                                </div>
+                            </div>
+
+                            <div class="token-visualization-header">
+                                <span>Tokenization Visualizer (Approximate 1 token ≈ 4 characters)</span>
+                            </div>
+                            <div id="token-visualizer-output" class="token-highlight-box">
+                                <!-- Dynamic highlighted tokens go here -->
+                            </div>
+                        </div>
+
+                        <!-- Statistics panel -->
+                        <div class="playground-results-sidebar">
+                            <div class="card glass-card stats-card">
+                                <h4>Playground Metrics</h4>
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <span class="stat-num" id="stat-chars">0</span>
+                                        <span class="stat-label">Characters</span>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-num text-purple" id="stat-words">0</span>
+                                        <span class="stat-label">Words</span>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-num text-cyan" id="stat-tokens">0</span>
+                                        <span class="stat-label">Estimated Tokens</span>
+                                    </div>
+                                </div>
+
+                                <h4 class="sidebar-subheading">API Query Cost Simulation</h4>
+                                <div class="cost-breakdown">
+                                    <div class="cost-row">
+                                        <span>Single Call Cost (Input Prompt):</span>
+                                        <strong id="cost-input-call">$0.000000</strong>
+                                    </div>
+                                    <div class="cost-row">
+                                        <span>Est. Response Cost (250 tokens output):</span>
+                                        <strong id="cost-output-call">$0.000000</strong>
+                                    </div>
+                                    <div class="cost-row divider">
+                                        <span>Total Cost per 10,000 API calls:</span>
+                                        <strong id="cost-total-large" class="text-cyan">$0.00</strong>
+                                    </div>
+                                </div>
+
+                                <h4 class="sidebar-subheading">Performance Forecast</h4>
+                                <div class="forecast-indicators">
+                                    <div class="forecast-item">
+                                        <span>Model Type:</span>
+                                        <strong id="forecast-type" class="text-purple">Cloud API</strong>
+                                    </div>
+                                    <div class="forecast-item">
+                                        <span>Avg. Network Latency:</span>
+                                        <strong id="forecast-latency">~1.2 seconds</strong>
+                                    </div>
+                                    <div class="forecast-item">
+                                        <span>Internet Dependency:</span>
+                                        <strong id="forecast-internet" class="text-danger">Required (Online)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: FLUTTER INTEGRATION -->
+                <section id="flutter-integration-sec" class="content-section">
+                    <div class="card glass-card">
+                        <h3>Flutter & Dart Integration Guide</h3>
+                        <p class="subtitle">Complete developer pathways for integrating AI capabilities into Flutter applications</p>
+                        
+                        <div class="integration-main-tabs">
+                            <button class="integration-tab active" data-int="cloud">Cloud LLM Endpoint (Google Gemini)</button>
+                            <button class="integration-tab" data-int="local-mediapipe">Local SLM (MediaPipe LLM Inference)</button>
+                            <button class="integration-tab" data-int="local-llama">Local SLM (Llama.cpp Dart Bindings)</button>
+                        </div>
+
+                        <!-- Cloud Guide -->
+                        <div class="integration-content active" id="int-content-cloud">
+                            <div class="integration-specs-grid">
+                                <div class="int-spec">
+                                    <span>Package:</span>
+                                    <strong><code>google_generative_ai</code></strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>Size Cost:</span>
+                                    <strong>&lt; 500 KB (Zero weight model)</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>OS Support:</span>
+                                    <strong>iOS, Android, Web, Desktop</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>Memory usage:</span>
+                                    <strong>Negligible (Standard HTTP calls)</strong>
+                                </div>
+                            </div>
+
+                            <p class="guide-p">This approach issues secure network requests directly to Google Gemini APIs. Ideal when you require maximum reasoning capacity, multi-modality, and minimal app bundle size overhead.</p>
+
+                            <div class="code-header">
+                                <span>pubspec.yaml</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  google_generative_ai: ^0.4.0</code></pre>
+
+                            <div class="code-header">
+                                <span>gemini_service.dart</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-dart">import 'package:google_generative_ai/google_generative_ai.dart';
+
+class GeminiService {
+  final GenerativeModel _model;
+
+  GeminiService(String apiKey) 
+      : _model = GenerativeModel(
+          model: 'gemini-1.5-flash', // fast & low cost model
+          apiKey: apiKey,
+          // optional system instruction to guide model personality
+          systemInstruction: Content.system("You are a helpful assistant for Flutter developers."),
+        );
+
+  Future<String> askModel(String query) async {
+    try {
+      final response = await _model.generateContent([Content.text(query)]);
+      return response.text ?? "Error: Empty response";
+    } catch (e) {
+      return "Network Exception: $e";
+    }
+  }
+}</code></pre>
+                        </div>
+
+                        <!-- Local MediaPipe Guide -->
+                        <div class="integration-content" id="int-content-local-mediapipe">
+                            <div class="integration-specs-grid">
+                                <div class="int-spec">
+                                    <span>SDK / Tool:</span>
+                                    <strong>Google MediaPipe Tasks (LLM Inference)</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>Model format:</span>
+                                    <strong><code>.bin</code> (MediaPipe quantized Gemma/Llama)</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>RAM usage:</span>
+                                    <strong>~1.4 GB to 2.2 GB</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>App Size Overhead:</span>
+                                    <strong>~40 MB (native C++ libraries)</strong>
+                                </div>
+                            </div>
+
+                            <p class="guide-p">Google's MediaPipe provides cross-platform hardware-accelerated bindings (GPU via Metal/Vulkan) to run SLMs directly on iOS and Android devices, guaranteeing low-latency response offline.</p>
+
+                            <div class="code-header">
+                                <span>pubspec.yaml</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  # Uses Google's official mediapipe genai tasks
+  mediapipe_genai: ^0.1.0 </code></pre>
+
+                            <div class="code-header">
+                                <span>mediapipe_service.dart</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-dart">import 'package:mediapipe_genai/mediapipe_genai.dart';
+
+class MediaPipeService {
+  LlmInference? _engine;
+
+  Future<void> initModel(String modelPath) async {
+    final options = LlmInferenceOptions(
+      modelPath: modelPath, // Path to local .bin file (e.g. gemma-2b-it-cpu.bin)
+      maxTokens: 512,
+      temperature: 0.7,
+    );
+    _engine = await LlmInference.create(options);
+  }
+
+  Future<String> generate(String prompt) async {
+    if (_engine == null) return "Model not initialized!";
+    
+    // Executes 100% offline, on-device CPU/GPU
+    final response = await _engine!.generateResponse(prompt);
+    return response;
+  }
+  
+  void dispose() {
+    _engine?.close();
+  }
+}</code></pre>
+                        </div>
+
+                        <!-- Local Llama Guide -->
+                        <div class="integration-content" id="int-content-local-llama">
+                            <div class="integration-specs-grid">
+                                <div class="int-spec">
+                                    <span>Framework:</span>
+                                    <strong><code>llama.cpp</code> native bindings via Dart FFI</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>Model format:</span>
+                                    <strong><code>.gguf</code> (INT4, INT8, FP16)</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>RAM usage:</span>
+                                    <strong>Scalable (e.g., 800MB - 8GB)</strong>
+                                </div>
+                                <div class="int-spec">
+                                    <span>Customizability:</span>
+                                    <strong>Extremely high (custom quantization, custom kernels)</strong>
+                                </div>
+                            </div>
+
+                            <p class="guide-p">Integrate <code>llama.cpp</code> using Dart Foreign Function Interface (FFI). This gives maximum control over CPU thread count, GPU layer offloading (on macOS/iOS), and allows loading any standard GGUF model directly from the mobile file storage.</p>
+
+                            <div class="code-header">
+                                <span>pubspec.yaml</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-yaml">dependencies:
+  flutter:
+    sdk: flutter
+  # Dart bindings for llama.cpp (llama_cpp_dart or custom FFI wrapper)
+  llama_cpp_dart: ^0.2.1 
+  path_provider: ^2.1.1 # to locate GGUF models on mobile storage</code></pre>
+
+                            <div class="code-header">
+                                <span>llama_service.dart</span>
+                                <button class="copy-code-btn"><i data-lucide="copy"></i> Copy</button>
+                            </div>
+                            <pre><code class="language-dart">import 'package:llama_cpp_dart/llama_cpp_dart.dart';
+import 'package:path_provider/path_provider.dart';
+
+class LlamaLocalService {
+  LlamaModel? _model;
+  LlamaContext? _context;
+
+  Future<void> loadModel(String filename) async {
+    final docDir = await getApplicationDocumentsDirectory();
+    final modelPath = "${docDir.path}/$filename"; // e.g. gemma-2b-q4_k_m.gguf
+
+    // Set parameters
+    final params = ModelParams()
+      ..useGpu = true // offload layers to Apple Metal (CoreML) or Vulkan
+      ..gpuLayers = 16; 
+
+    _model = LlamaModel(modelPath, params);
+    
+    final contextParams = ContextParams()..contextSize = 2048;
+    _context = LlamaContext(_model!, contextParams);
+  }
+
+  String chat(String prompt) {
+    if (_context == null) return "Model not loaded";
+    
+    // Feed tokens to context and run local evaluation loop
+    final tokens = _context!.tokenize(prompt, addBos: true);
+    _context!.eval(tokens);
+    
+    // Retrieve output tokens
+    final response = _context!.generateResponse();
+    return response;
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: COMPARISON MATRIX -->
+                <section id="comparison-matrix-sec" class="content-section">
+                    <div class="card glass-card">
+                        <h3>Model Comparison Matrix</h3>
+                        <p class="subtitle">Quick reference index of popular cloud LLMs and on-device SLMs</p>
+                        
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model Name</th>
+                                        <th>Creator</th>
+                                        <th>Parameters</th>
+                                        <th>MMLU Accuracy</th>
+                                        <th>Cloud vs Local</th>
+                                        <th>Avg. Cost (per 1M input)</th>
+                                        <th>License</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparison-matrix-body">
+                                    <!-- Populated dynamically via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 7: ADD MODEL -->
+                <section id="add-model-sec" class="content-section" style="display: none;">
+                    <div class="card glass-card wizard-container">
+                        <div class="wizard-header">
+                            <h3>Add Custom Model Details</h3>
+                            <p>Manually register a custom LLM or SLM. It will be saved locally in your browser storage and will instantly appear in the Model Finder search and Comparison Matrix.</p>
+                        </div>
+                        
+                        <form id="add-model-form">
+                            <div class="form-grid-2col" style="gap: 1.5rem; margin-top: 1rem;">
+                                <div class="input-group">
+                                    <label for="form-model-name">Model Name *</label>
+                                    <input type="text" id="form-model-name" placeholder="e.g. My-Llama-FineTune-3" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-creator">Creator *</label>
+                                    <input type="text" id="form-model-creator" placeholder="e.g. Custom Dev, Meta, Google" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-category">Model Category *</label>
+                                    <select id="form-model-category" required>
+                                        <option value="SLM" selected>Small Language Model (SLM - Local / On-device)</option>
+                                        <option value="LLM">Large Language Model (LLM - Cloud API)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-license">License *</label>
+                                    <input type="text" id="form-model-license" placeholder="e.g. Apache 2.0, MIT, Proprietary" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-params">Parameter Size</label>
+                                    <input type="text" id="form-model-params" placeholder="e.g. 3B, 8B, N/A (MoE)">
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-accuracy">MMLU Accuracy (%)</label>
+                                    <input type="text" id="form-model-accuracy" placeholder="e.g. 68.5%">
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-context">Context Window (tokens)</label>
+                                    <input type="text" id="form-model-context" placeholder="e.g. 8,192, 128k">
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-cost">Running Cost Description</label>
+                                    <input type="text" id="form-model-cost" placeholder="e.g. $0.00 (Local) or $1.00/1M tokens">
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid-1col" style="gap: 1.5rem; margin-top: 1.5rem;">
+                                <div class="input-group">
+                                    <label for="form-model-desc">Model Description *</label>
+                                    <textarea id="form-model-desc" rows="4" placeholder="Brief explanation of the model architecture, how it was trained, and key capabilities..." required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2col" style="gap: 1.5rem; margin-top: 1.5rem;">
+                                <div class="input-group">
+                                    <label for="form-model-input-price">Input Token Price (per 1M tokens)</label>
+                                    <input type="text" id="form-model-input-price" placeholder="e.g. $0.00 or $0.075">
+                                </div>
+                                <div class="input-group">
+                                    <label for="form-model-output-price">Output Token Price (per 1M tokens)</label>
+                                    <input type="text" id="form-model-output-price" placeholder="e.g. $0.00 or $0.30">
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 2rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                                <button type="reset" class="btn btn-secondary">Reset Form</button>
+                                <button type="submit" class="btn btn-primary">Save Model Details</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- SECTION 8: MARKET TRENDS -->
+                <section id="market-feed-sec" class="content-section" style="display: none;">
+                    <div class="card glass-card" style="margin-bottom: 2rem;">
+                        <h3>Latest AI Model Releases</h3>
+                        <p class="subtitle">Stay updated with newly launched LLMs and SLMs in the AI ecosystem. Read their layperson highlights and import them directly into your comparison matrix.</p>
+                    </div>
+                    
+                    <div id="market-feed-container" class="responsive-card-grid">
+                        <!-- Dynamic release feed cards loaded from js -->
+                    </div>
+                </section>
+
+                <!-- SECTION 9: AI NEWS HUB -->
+                <section id="news-hub-sec" class="content-section">
+                    <!-- Top News Hub Stats and Action Header -->
+                    <div class="card glass-card" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+                            <div>
+                                <h3>AI News & Social Radar</h3>
+                                <p class="subtitle">Aggregated updates from top researchers, engineers, and open-source communities. Track model announcements and learn from the best in the industry.</p>
+                            </div>
+                            <button id="simulate-news-btn" class="search-btn" style="background: linear-gradient(135deg, var(--secondary), var(--primary)); display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);">
+                                <i data-lucide="bell-ring" style="width: 16px; height: 16px;"></i>
+                                Simulate Live Event
+                            </button>
+                        </div>
+                        
+                        <!-- Control Bar: Search and Filters -->
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1.25rem;">
+                            <!-- Filter Chips -->
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Filter Stream</span>
+                                <div id="news-filter-chips" style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                                    <button class="search-tag active" data-filter="all">All Streams</button>
+                                    <button class="search-tag" data-filter="blogs">📰 News & Articles</button>
+                                    <button class="search-tag" data-filter="reddit">💬 Discussions</button>
+                                    <button class="search-tag" data-filter="videos">🎥 Videos</button>
+                                    <button class="search-tag" data-filter="github">💻 GitHub Projects</button>
+                                    <button class="search-tag" data-filter="models">🤖 AI Models</button>
+                                    <div style="width: 1px; height: 16px; background: var(--border-color); margin: 0 0.25rem;"></div>
+                                    <button id="refresh-news-btn" class="search-tag" style="border-color: rgba(6, 182, 212, 0.25); background: rgba(6, 182, 212, 0.03); color: var(--secondary-light); display: flex; align-items: center; gap: 0.35rem;">
+                                        <i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i> Fetch Live Feeds
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Search -->
+                            <div class="search-container-wrapper" style="max-width: 320px;">
+                                <i data-lucide="search" class="search-icon" style="left: 0.85rem; width: 16px; height: 16px;"></i>
+                                <input type="text" id="news-search-input" placeholder="Search updates..." autocomplete="off" style="padding: 0.6rem 2.5rem 0.6rem 2.25rem; font-size: 0.85rem; border-radius: 8px;">
+                                <button id="news-clear-btn" class="clear-btn" style="right: 10px; padding: 0.15rem;"><i data-lucide="x" style="width: 14px; height: 14px;"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News Hub Main Grid -->
+                    <div class="grid-layout">
+                        <!-- Left: Live Feed Column -->
+                        <div class="news-stream-col" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div id="news-feed-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                <!-- Loaded dynamically from js -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Accounts Directory & Custom Addition Form -->
+                        <div class="news-directory-col" style="display: flex; flex-direction: column; gap: 2rem;">
+                            <!-- Directory Card -->
+                            <div class="card glass-card" style="padding: 1.5rem;">
+                                <h4 style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--heading-color);"><i data-lucide="users" style="color: var(--secondary-light); width: 20px; height: 20px;"></i> Core Channels</h4>
+                                <p class="small-text" style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem; line-height: 1.4;">Curated set of top-tier creators. Check out their accounts directly to learn more.</p>
+                                <div id="news-directory-container" style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <!-- Loaded dynamically from js -->
+                                </div>
+                            </div>
+
+                            <!-- Register Custom Source Form -->
+                            <div class="card glass-card" style="padding: 1.5rem;">
+                                <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; color: var(--heading-color);"><i data-lucide="plus-circle" style="color: var(--primary-light); width: 20px; height: 20px;"></i> Add Custom Source</h4>
+                                <p class="small-text" style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem; line-height: 1.4;">Track your favorite RSS blogs, subreddits, YouTube channels, or GitHub repositories.</p>
+                                
+                                <form id="add-news-source-form" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                                    <div class="input-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                        <label for="source-name" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Source Name:</label>
+                                        <input type="text" id="source-name" placeholder="e.g. LangChain Blog or langchain-ai/langchain" required style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; color: var(--heading-color); font-family: var(--font-sans); font-size: 0.85rem; outline: none;">
+                                    </div>
+                                    <div class="input-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                        <label for="source-handle" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Handle/URL/Query:</label>
+                                        <input type="text" id="source-handle" placeholder="e.g. r/ChatGPT, langchain-ai/langchain, or RSS URL" required style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; color: var(--heading-color); font-family: var(--font-sans); font-size: 0.85rem; outline: none;">
+                                    </div>
+                                    <div class="input-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                        <label for="source-type" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Channel Type:</label>
+                                        <select id="source-type" style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; color: var(--heading-color); font-family: var(--font-sans); font-size: 0.85rem; outline: none;">
+                                            <option value="blogs" selected>📰 RSS Feed / Blog</option>
+                                            <option value="reddit">💬 Reddit Community</option>
+                                            <option value="videos">🎥 YouTube Video Feed</option>
+                                            <option value="github">💻 GitHub Repository</option>
+                                            <option value="models">🤖 Hugging Face Model Query</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group" style="display: flex; flex-direction: column; gap: 0.35rem;">
+                                        <label for="source-desc" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Focus/Specialty:</label>
+                                        <textarea id="source-desc" placeholder="e.g. Agent updates, pipeline tools, model releases..." required rows="2" style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; color: var(--heading-color); font-family: var(--font-sans); font-size: 0.85rem; outline: none; resize: none;"></textarea>
+                                    </div>
+                                    <button type="submit" class="search-btn" style="font-size: 0.85rem; padding: 0.6rem; border-radius: 6px; width: 100%; box-shadow: none;">Add Source</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- App Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
