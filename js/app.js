@@ -24,9 +24,9 @@ function enrichModelData(model) {
     if (model.category === "LLM") {
         analogy = `Think of ${model.name} as a supercomputer brain in the cloud. It's like calling a brilliant remote scientist on the phone—they can solve any complex question you ask, but they only work when they have a network connection, and they charge you a tiny fraction of a cent for every word they say.`;
         train = `Trained on trillions of words from public websites, academic journals, code repositories, books, and Q&A forums. Proprietary models (like Gemini and GPT) are also aligned using thousands of hours of direct human feedback (RLHF) to ensure helpfulness and safety.`;
-        
+
         mobPub = "dependencies:\n  flutter:\n    sdk: flutter\n  http: ^1.2.0";
-        
+
         if (idLower.includes("gemini")) {
             mobPub = "dependencies:\n  flutter:\n    sdk: flutter\n  google_generative_ai: ^0.4.0";
             mobCode = `import 'package:google_generative_ai/google_generative_ai.dart';\n\nFuture<String> askGemini(String prompt) async {\n  final apiKey = const String.fromEnvironment('${CONFIG.API_KEYS.GEMINI}');\n  final model = GenerativeModel(model: '${model.id}', apiKey: apiKey);\n  final response = await model.generateContent([Content.text(prompt)]);\n  return response.text ?? '';\n}`;
@@ -49,7 +49,7 @@ function enrichModelData(model) {
     } else {
         analogy = `Think of ${model.name} as a pocket-sized dictionary-brain that runs directly inside your device's memory. It's like having a helpful assistant sitting next to you offline on a plane—they aren't as all-knowing as the cloud supercomputer, but they respond instantly, they don't need internet, and they never send your private chats to anyone else.`;
         train = `Trained on high-quality text datasets (e.g. Meta's 15T tokens for Llama 3) focusing on clean websites, structured textbooks, code repositories, and educational transcripts. Many SLMs also use 'knowledge distillation' where they learn directly from the answers of larger models (like GPT-4).`;
-        
+
         mobPub = "dependencies:\n  flutter:\n    sdk: flutter\n  llama_cpp_dart: ^0.2.1\n  path_provider: ^2.1.1";
         mobCode = `import 'package:llama_cpp_dart/llama_cpp_dart.dart';\n\nFuture<String> runLocalModel(String prompt) async {\n  final params = ModelParams()..useGpu = true;\n  // Load your quantized GGUF weights locally\n  final model = LlamaModel('/path/to/${model.id}-q4.gguf', params);\n  final context = LlamaContext(model, ContextParams()..contextSize = 2048);\n  \n  final tokens = context.tokenize(prompt, addBos: true);\n  context.eval(tokens);\n  return context.generateResponse();\n}`;
 
@@ -102,9 +102,9 @@ function enrichModelData(model) {
         let gsm8k = 50;
         let humanEval = 45;
         let gpqa = 20;
-        
+
         const idLower = model.id.toLowerCase();
-        
+
         // Curated accuracy assignments based on real benchmarks
         if (idLower.includes("gemini-1.5-pro")) {
             mmlu = 90.8; gsm8k = 91.7; humanEval = 84.1; gpqa = 46.2;
@@ -134,7 +134,7 @@ function enrichModelData(model) {
             // General heuristics for other models based on parameters
             const paramMatch = model.parameters.match(/(\d+\.?\d*)/);
             const params = paramMatch ? parseFloat(paramMatch[1]) : 7.0;
-            
+
             if (model.category === "LLM") {
                 mmlu = Math.min(92, 75 + (params > 30 ? 10 : 5) + Math.random() * 5);
                 gsm8k = Math.min(95, mmlu + 5 + Math.random() * 3);
@@ -147,7 +147,7 @@ function enrichModelData(model) {
                 gpqa = Math.min(35, mmlu / 2.5 + Math.random() * 3);
             }
         }
-        
+
         model.benchmarks = {
             mmlu: parseFloat(mmlu.toFixed(1)),
             gsm8k: parseFloat(gsm8k.toFixed(1)),
@@ -162,13 +162,13 @@ function enrichModelData(model) {
         let attention = "Multi-Head Attention (MHA)";
         let corpus = "Varies (typically 1T to 3T tokens)";
         let limits = "Proprietary license, subject to provider terms of service.";
-        
+
         let iphone = "Not applicable (Cloud Service)";
         let rtx = "High speed cloud endpoint (~80-120 tok/sec)";
         let mac = "High speed cloud endpoint (~50-80 tok/sec)";
-        
+
         const idLower = model.id.toLowerCase();
-        
+
         if (model.category === "LLM") {
             if (idLower.includes("gemini")) {
                 safety = "Advanced safety filters (Harassment, Hate Speech, Sexually Explicit, Dangerous Content) + RLHF alignment.";
@@ -196,7 +196,7 @@ function enrichModelData(model) {
             }
         } else { // SLM (Runs locally)
             attention = "Grouped Query Attention (GQA) / Multi-Query (MQA)";
-            
+
             if (idLower.includes("gemma")) {
                 safety = "Instruction fine-tuning + RLHF alignment. Google terms filter out dangerous advice and PII leakages.";
                 corpus = "8.0 Trillion tokens (Gemma 9B) or 2.0 Trillion tokens (Gemma 2B) of highly filtered educational text.";
@@ -228,11 +228,11 @@ function enrichModelData(model) {
                 // Heuristics for custom SLMs
                 const paramMatch = model.parameters.match(/(\d+\.?\d*)/);
                 const params = paramMatch ? parseFloat(paramMatch[1]) : 7.0;
-                
+
                 safety = "Basic post-training alignment (SFT) + standard open-source safety guidelines.";
                 corpus = `${(params * 1.5).toFixed(1)} Trillion tokens of web text, textbooks, and code.`;
                 limits = "Open Weights under Apache 2.0 or MIT. Commercial use allowed.";
-                
+
                 if (params < 4) {
                     iphone = "~14 - 22 tokens/sec (INT4)";
                     rtx = "~120 - 160 tokens/sec (FP16)";
@@ -244,7 +244,7 @@ function enrichModelData(model) {
                 }
             }
         }
-        
+
         model.deepDive = {
             safety: safety,
             attention: attention,
@@ -327,6 +327,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Setup Mobile Sidebar toggles
     setupMobileSidebar();
+
+    // Setup light/dark theme toggle
+    setupThemeToggle();
 
     // Load initial model details
     displayModelDetails(allModels[0]);
@@ -489,9 +492,9 @@ function setupModelSearch() {
 
 async function performSearch(query) {
     if (!query || query.trim() === "") return;
-    
+
     const queryLower = query.toLowerCase().trim();
-    
+
     // Hide recommendations box initially
     const recBox = document.getElementById("search-recommendation-box");
     if (recBox) recBox.classList.add("hidden");
@@ -499,7 +502,7 @@ async function performSearch(query) {
     // Intent/keyword based recommendations check
     let matchedKeyword = null;
     let recommendedModels = [];
-    
+
     if (queryLower.includes("video") || queryLower.includes("multimodal") || queryLower.includes("audio")) {
         matchedKeyword = "video/multimodal processing";
     } else if (queryLower.includes("image") || queryLower.includes("vision") || queryLower.includes("picture") || queryLower.includes("photo")) {
@@ -517,7 +520,7 @@ async function performSearch(query) {
         allModels.forEach(model => {
             let isMatch = false;
             let matchReason = "";
-            
+
             const textToSearch = [
                 model.name,
                 model.description,
@@ -528,7 +531,7 @@ async function performSearch(query) {
                 model.useCases.join(" "),
                 model.id
             ].join(" ").toLowerCase();
-            
+
             if (matchedKeyword === "video/multimodal processing") {
                 if (textToSearch.includes("video") || textToSearch.includes("multimodal") || textToSearch.includes("audio") || textToSearch.includes("expert") || textToSearch.includes("pro") || textToSearch.includes("omni")) {
                     isMatch = true;
@@ -555,7 +558,7 @@ async function performSearch(query) {
                     matchReason = "Offers free cloud rate limits or executes locally at zero cost";
                 }
             }
-            
+
             if (isMatch) {
                 recommendedModels.push({
                     model: model,
@@ -571,7 +574,7 @@ async function performSearch(query) {
         document.getElementById("rec-keyword").textContent = matchedKeyword;
         const listContainer = document.getElementById("rec-models-list");
         listContainer.innerHTML = "";
-        
+
         recommendedModels.forEach(item => {
             const model = item.model;
             const btn = document.createElement("button");
@@ -584,44 +587,44 @@ async function performSearch(query) {
             btn.style.alignItems = "flex-start";
             btn.style.gap = "0.2rem";
             btn.style.borderRadius = "8px";
-            btn.style.background = "rgba(255, 255, 255, 0.02)";
+            btn.style.background = "var(--overlay-02)";
             btn.style.border = "1px solid var(--border-color)";
             btn.style.textAlign = "left";
             btn.style.cursor = "pointer";
             btn.style.transition = "var(--transition-fast)";
-            
+
             btn.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 0.4rem; font-weight: 600; color: white;">
+                <div style="display: flex; align-items: center; gap: 0.4rem; font-weight: 600; color: var(--heading-color);">
                     <i data-lucide="cpu" style="width:12px;height:12px;"></i> ${model.name}
                 </div>
                 <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.2;">
                     ${item.reason}
                 </div>
             `;
-            
+
             // Hover styling
             btn.addEventListener("mouseenter", () => {
-                btn.style.borderColor = "rgba(6, 182, 212, 0.4)";
-                btn.style.background = "rgba(6, 182, 212, 0.04)";
+                btn.style.borderColor = "var(--accent2-40)";
+                btn.style.background = "var(--accent2-06)";
             });
             btn.addEventListener("mouseleave", () => {
                 btn.style.borderColor = "var(--border-color)";
-                btn.style.background = "rgba(255, 255, 255, 0.02)";
+                btn.style.background = "var(--overlay-02)";
             });
-            
+
             btn.addEventListener("click", () => {
                 displayModelDetails(model);
             });
             listContainer.appendChild(btn);
         });
-        
+
         lucide.createIcons();
-        
+
         // Auto-display the top recommended model details
         displayModelDetails(recommendedModels[0].model);
         return;
     }
-    
+
     // Clean query: split by common delimiters and strip filler slogans
     let cleanedQuery = query.split(/[|:-]/)[0].trim().toLowerCase();
     cleanedQuery = cleanedQuery
@@ -637,8 +640,8 @@ async function performSearch(query) {
     }
 
     // Check curated/all models first
-    const localMatch = allModels.find(m => 
-        m.id.toLowerCase().includes(cleanedQuery) || 
+    const localMatch = allModels.find(m =>
+        m.id.toLowerCase().includes(cleanedQuery) ||
         m.name.toLowerCase().includes(cleanedQuery) ||
         m.creator.toLowerCase().includes(cleanedQuery)
     );
@@ -664,7 +667,7 @@ async function performSearch(query) {
     try {
         const response = await fetch(`https://huggingface.co/api/models?search=${encodeURIComponent(cleanedQuery)}&limit=5&sort=downloads&direction=-1`);
         if (!response.ok) throw new Error("API call failed");
-        
+
         const modelsList = await response.json();
         statusBar.classList.add("hidden");
 
@@ -692,10 +695,10 @@ function processHuggingFaceModel(hfModel) {
     const sizeMatch = modelId.match(/(\d+\.?\d*)[bB]/);
     const params = sizeMatch ? `${sizeMatch[1]} Billion` : "Unknown Size";
     const isSLM = sizeMatch && parseFloat(sizeMatch[1]) < 15;
-    
+
     // Extract author/creator
     const creator = hfModel.author || modelId.split("/")[0] || "Hugging Face Contributor";
-    
+
     // Determine category based on parameters or tags
     const category = isSLM ? "SLM" : "LLM";
 
@@ -736,13 +739,13 @@ function processHuggingFaceModel(hfModel) {
             note: "Free model weights. You only pay for your own hosting or device battery/RAM."
         },
         flutter: {
-            intro: isSLM 
+            intro: isSLM
                 ? `To run this model on-device in Flutter, download the GGUF weight file and use the llama.cpp Dart FFI library:`
                 : `To query this model, host it on an API endpoint (e.g. Hugging Face TGI or vLLM) and invoke it over HTTP:`,
-            pubspec: isSLM 
-                ? "dependencies:\n  flutter:\n    sdk: flutter\n  llama_cpp_dart: ^0.2.1\n  path_provider: ^2.1.1" 
+            pubspec: isSLM
+                ? "dependencies:\n  flutter:\n    sdk: flutter\n  llama_cpp_dart: ^0.2.1\n  path_provider: ^2.1.1"
                 : "dependencies:\n  flutter:\n    sdk: flutter\n  http: ^1.2.0",
-            main: isSLM 
+            main: isSLM
                 ? `import 'package:llama_cpp_dart/llama_cpp_dart.dart';\n\nFuture<String> runCustomSLM(String prompt) async {\n  // Load custom model ${shortName} GGUF\n  final params = ModelParams()..useGpu = true;\n  final model = LlamaModel('/path/to/${shortName.toLowerCase()}.gguf', params);\n  final context = LlamaContext(model, ContextParams()..contextSize = 2048);\n  \n  final tokens = context.tokenize(prompt, addBos: true);\n  context.eval(tokens);\n  return context.generateResponse();\n}`
                 : `import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nFuture<String> callHostedModel(String prompt) async {\n  final url = Uri.parse('https://api-inference.huggingface.co/models/${modelId}');\n  final response = await http.post(url, headers: {\n    'Authorization': 'Bearer YOUR_HF_TOKEN',\n    'content-type': 'application/json'\n  }, body: jsonEncode({'inputs': prompt}));\n  \n  final List<dynamic> data = jsonDecode(response.body);\n  return data[0]['generated_text'] ?? '';\n}`
         }
@@ -797,7 +800,7 @@ function displayModelDetails(model) {
     const catBadge = document.getElementById("model-category-badge");
     catBadge.textContent = model.category === "LLM" ? "Large Language Model (LLM)" : "Small Language Model (SLM)";
     catBadge.className = `badge-category ${model.category.toLowerCase()}`;
-    
+
     document.getElementById("model-license-badge").textContent = model.license;
 
     // Header Text
@@ -808,7 +811,7 @@ function displayModelDetails(model) {
     const capabilitiesRow = document.getElementById("model-capabilities-row");
     if (capabilitiesRow) {
         capabilitiesRow.innerHTML = "";
-        
+
         const textToSearch = [
             model.name,
             model.description,
@@ -819,41 +822,41 @@ function displayModelDetails(model) {
             model.useCases.join(" "),
             model.id
         ].join(" ").toLowerCase();
-        
+
         const badges = [];
-        
+
         if (model.category === "SLM" || textToSearch.includes("local") || textToSearch.includes("offline") || textToSearch.includes("private")) {
             badges.push({
                 icon: "wifi-off",
                 label: "Offline & Local",
-                style: "border-color: rgba(6, 182, 212, 0.3); background: rgba(6, 182, 212, 0.05); color: var(--secondary-light);"
+                style: "border-color: var(--accent2-30); background: var(--accent2-05); color: var(--secondary-light);"
             });
         }
-        
+
         if (textToSearch.includes("video") || textToSearch.includes("multimodal") || textToSearch.includes("audio") || textToSearch.includes("expert") || textToSearch.includes("omni")) {
             badges.push({
                 icon: "clapperboard",
                 label: "Multimodal",
-                style: "border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); color: var(--primary-light);"
+                style: "border-color: var(--accent-30); background: var(--accent-05); color: var(--primary-light);"
             });
         }
-        
+
         if (textToSearch.includes("vision") || textToSearch.includes("image") || textToSearch.includes("picture") || textToSearch.includes("photo") || textToSearch.includes("omni")) {
             badges.push({
                 icon: "eye",
                 label: "Vision",
-                style: "border-color: rgba(6, 182, 212, 0.3); background: rgba(6, 182, 212, 0.05); color: var(--secondary-light);"
+                style: "border-color: var(--accent2-30); background: var(--accent2-05); color: var(--secondary-light);"
             });
         }
-        
+
         if (textToSearch.includes("code") || textToSearch.includes("coding") || textToSearch.includes("program") || textToSearch.includes("script") || textToSearch.includes("developer")) {
             badges.push({
                 icon: "code-2",
                 label: "Coding",
-                style: "border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); color: var(--primary-light);"
+                style: "border-color: var(--accent-30); background: var(--accent-05); color: var(--primary-light);"
             });
         }
-        
+
         if (model.cost.includes("Free") || model.cost.includes("$0.00") || textToSearch.includes("free") || textToSearch.includes("cheap")) {
             badges.push({
                 icon: "piggy-bank",
@@ -861,23 +864,23 @@ function displayModelDetails(model) {
                 style: "border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); color: #34d399;"
             });
         }
-        
+
         const contextNum = parseInt(model.context.replace(/,/g, ""));
         if (contextNum >= 100000 || model.context.includes("2M") || model.context.includes("1M") || model.context.includes("128k") || model.context.includes("200k")) {
             badges.push({
                 icon: "database",
                 label: "Long Context",
-                style: "border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05); color: var(--primary-light);"
+                style: "border-color: var(--accent-30); background: var(--accent-05); color: var(--primary-light);"
             });
         }
-        
+
         badges.forEach(b => {
             const span = document.createElement("span");
             span.style.cssText = `padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; border: 1px solid; display: inline-flex; align-items: center; gap: 0.3rem; ` + b.style;
             span.innerHTML = `<i data-lucide="${b.icon}" style="width:12px;height:12px;"></i> ${b.label}`;
             capabilitiesRow.appendChild(span);
         });
-        
+
         lucide.createIcons();
     }
 
@@ -889,7 +892,7 @@ function displayModelDetails(model) {
 
     // Tab Contents
     document.getElementById("model-description").textContent = model.description;
-    
+
     const useCasesList = document.getElementById("model-use-cases");
     useCasesList.innerHTML = "";
     model.useCases.forEach(uc => {
@@ -908,14 +911,14 @@ function displayModelDetails(model) {
     const barsContainer = document.getElementById("benchmark-bars-container");
     if (barsContainer && model.benchmarks) {
         barsContainer.innerHTML = "";
-        
+
         const benchmarksList = [
             { key: "mmlu", label: "MMLU (General Academic Knowledge)", desc: "Covers elementary math, US history, computer science, law, and more." },
             { key: "gsm8k", label: "GSM8K (Grade School Math)", desc: "Measures high-quality multi-step mathematical reasoning tasks." },
             { key: "humanEval", label: "HumanEval (Python Coding)", desc: "Evaluates the accuracy of generated functional Python coding blocks." },
             { key: "gpqa", label: "GPQA (Graduate-Level Reasoning)", desc: "Ultra-hard reasoning questions written by PhD experts in physics, bio, and chem." }
         ];
-        
+
         benchmarksList.forEach(b => {
             const value = model.benchmarks[b.key];
             const item = document.createElement("div");
@@ -923,7 +926,7 @@ function displayModelDetails(model) {
             item.style.display = "flex";
             item.style.flexDirection = "column";
             item.style.gap = "0.25rem";
-            
+
             item.innerHTML = `
                 <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.15rem;">
                     <div>
@@ -932,7 +935,7 @@ function displayModelDetails(model) {
                     </div>
                     <span style="font-weight: 700; color: var(--secondary-light); font-size: 0.85rem;">${value}%</span>
                 </div>
-                <div style="width: 100%; height: 5px; background: rgba(255, 255, 255, 0.04); border-radius: 3px; overflow: hidden;">
+                <div style="width: 100%; height: 5px; background: var(--overlay-04); border-radius: 3px; overflow: hidden;">
                     <div style="width: ${value}%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 3px;"></div>
                 </div>
             `;
@@ -981,11 +984,11 @@ function displayModelDetails(model) {
     const tabs = document.querySelectorAll(".detail-tab");
     tabs.forEach(t => t.classList.remove("active"));
     tabs[0].classList.add("active");
-    
+
     document.querySelectorAll(".detail-tab-content").forEach(c => c.classList.remove("active"));
     document.getElementById("tab-content-about").classList.add("active");
     activeDetailTab = "about";
-    
+
     // Update local calculator if it's a numeric parameter SLM
     const paramMatch = model.parameters.match(/(\d+\.?\d*)/);
     if (paramMatch && model.category === "SLM") {
@@ -1012,7 +1015,7 @@ function updateRamRequirement() {
 
     // Calculate weight size (GB)
     const weightSize = params * (quant / 8);
-    
+
     // Calculate required RAM (Weight + context activation footprint)
     const ramRequired = weightSize + 0.5;
 
@@ -1118,7 +1121,7 @@ function updateWizardUI() {
     const nextBtn = document.getElementById("wiz-next-btn");
 
     prevBtn.disabled = wizardStep === 1;
-    
+
     if (wizardStep === 4) {
         calculateRecommendation();
         nextBtn.style.display = "none";
@@ -1142,7 +1145,7 @@ function calculateRecommendation() {
         recIcon.setAttribute("data-lucide", "smartphone");
         recIcon.className = "rec-icon text-cyan";
         headline.textContent = "Recommended: On-Device SLM (Local Execution)";
-        
+
         if (wizardAnswers.reasoning === "complex") {
             explanation.textContent = "Your project demands offline operation and complex reasoning. We recommend deploying Llama 3 8B or Gemma 2 9B quantized to 4-bit. This yields high capability without server overhead, but requires premium client devices.";
             path.textContent = "Local Native (llama.cpp FFI / GGUF)";
@@ -1274,7 +1277,7 @@ function calculateTrainingSpec() {
     // Render results
     document.getElementById("train-gpu-rec").textContent = gpuRec;
     document.getElementById("train-vram-required").textContent = vramVal;
-    
+
     // Formatting time
     let timeStr = "";
     if (timeHours < 1.0) {
@@ -1304,7 +1307,7 @@ function runPlaygroundSim() {
     const charCount = text.length;
     // Word count calculation
     const wordCount = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
-    
+
     // Token approximation (LLMs typically average 4 characters per token in English)
     const tokenCount = Math.ceil(charCount / 4);
 
@@ -1354,7 +1357,7 @@ function visualizeTokens(text) {
         container.style.color = "var(--text-muted)";
         return;
     }
-    
+
     container.style.color = "var(--text-primary)";
     container.innerHTML = "";
 
@@ -1369,7 +1372,7 @@ function visualizeTokens(text) {
         const span = document.createElement("span");
         span.className = "token-span";
         span.textContent = tokenText;
-        
+
         container.appendChild(span);
         i += tokenLen;
     }
@@ -1398,7 +1401,7 @@ function setupCustomModelForm() {
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        
+
         const name = document.getElementById("form-model-name").value;
         const creator = document.getElementById("form-model-creator").value;
         const category = document.getElementById("form-model-category").value;
@@ -1442,7 +1445,7 @@ function setupCustomModelForm() {
                 note: "User defined pricing model."
             },
             flutter: {
-                intro: category === "SLM" 
+                intro: category === "SLM"
                     ? `Load and run your custom local model ${name} using llama.cpp dart bindings:`
                     : `Query your custom cloud API endpoint for ${name} using standard HTTP bindings:`,
                 pubspec: category === "SLM"
@@ -1486,7 +1489,7 @@ function renderComparisonMatrix() {
 
     allModels.forEach(model => {
         const tr = document.createElement("tr");
-        
+
         if (model.id === "gemini-1.5-pro") {
             tr.className = "highlighted-row";
         } else if (model.id === "gemma-2-2b") {
@@ -1529,13 +1532,13 @@ function addDynamicModelToList(model) {
         customModels.push(model);
         localStorage.setItem("modelverse_custom_models", JSON.stringify(customModels));
         allModels = [...curatedModels, ...customModels];
-        
+
         // Re-render comparison matrix table
         renderComparisonMatrix();
-        
+
         // Re-render market trends feed to update import button states
         renderMarketReleaseFeed();
-        
+
         // Show success toast notification
         showToastNotification(`Successfully resolved and imported "${model.name}" from the web!`);
     }
@@ -1546,17 +1549,21 @@ function showToastNotification(message) {
     const toast = document.createElement("div");
     toast.className = "toast-message";
     toast.innerHTML = `<i data-lucide="info" class="toast-icon"></i> <span>${message}</span>`;
-    
+
     // Toast styles
     toast.style.position = "fixed";
     toast.style.bottom = "30px";
     toast.style.right = "30px";
-    toast.style.background = "rgba(11, 15, 25, 0.95)";
+    toast.style.left = "30px";
+    toast.style.marginLeft = "auto";
+    toast.style.maxWidth = "calc(100vw - 60px)";
+    toast.style.width = "fit-content";
+    toast.style.background = "var(--bg-card)";
     toast.style.border = "1px solid var(--secondary)";
-    toast.style.color = "white";
+    toast.style.color = "var(--heading-color)";
     toast.style.padding = "0.85rem 1.5rem";
     toast.style.borderRadius = "12px";
-    toast.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(6, 182, 212, 0.1)";
+    toast.style.boxShadow = "var(--shadow-elevated)";
     toast.style.display = "flex";
     toast.style.alignItems = "center";
     toast.style.gap = "0.75rem";
@@ -1564,10 +1571,10 @@ function showToastNotification(message) {
     toast.style.fontSize = "0.9rem";
     toast.style.fontWeight = "500";
     toast.style.animation = "fadeIn 0.3s";
-    
+
     document.body.appendChild(toast);
     lucide.createIcons();
-    
+
     setTimeout(() => {
         toast.style.transition = "opacity 0.5s, transform 0.5s";
         toast.style.opacity = "0";
@@ -1579,7 +1586,7 @@ function showToastNotification(message) {
 // MATCH FAMOUS CLOUD MODELS AND RETURN SPECS
 function checkKnownCloudModel(query) {
     const queryLower = query.toLowerCase();
-    
+
     const knownAPIs = [
         {
             keywords: ["gpt-4", "gpt4", "gpt-4o", "gpt-4-turbo", "o1-pro", "o1-mini"],
@@ -1651,7 +1658,7 @@ function checkKnownCloudModel(query) {
     for (const api of knownAPIs) {
         if (api.keywords.some(k => queryLower.includes(k))) {
             const shortName = query.toUpperCase();
-            
+
             // Resolve dynamic provider URL and auth keys
             let providerUrl = "https://api.yourprovider.com/v1/chat/completions";
             let apiKeyVar = "YOUR_API_KEY";
@@ -1711,7 +1718,7 @@ function setupDeploymentTabs() {
     subTabs.forEach(tab => {
         tab.addEventListener("click", () => {
             const deployName = tab.getAttribute("data-deploy");
-            
+
             // Update active sub-tab button
             subTabs.forEach(t => t.classList.remove("active"));
             tab.classList.add("active");
@@ -1729,17 +1736,17 @@ function setupDeploymentTabs() {
 function renderMarketReleaseFeed() {
     const container = document.getElementById("market-feed-container");
     if (!container) return;
-    
+
     container.innerHTML = "";
-    
+
     marketReleaseFeed.forEach(item => {
         const isAlreadyImported = allModels.some(m => m.id.toLowerCase() === item.id.toLowerCase());
         const card = document.createElement("div");
         card.className = "market-card";
-        
+
         const badgeClass = item.category.toLowerCase() === 'llm' ? 'cloud' : 'local';
         const badgeLabel = item.category === 'LLM' ? 'Cloud API' : 'On-Device';
-        
+
         card.innerHTML = `
             <div class="market-card-header">
                 <div>
@@ -1765,47 +1772,47 @@ function renderMarketReleaseFeed() {
                 </button>
             </div>
         `;
-        
+
         const importBtn = card.querySelector(".import-btn");
         if (importBtn && !isAlreadyImported) {
             importBtn.addEventListener("click", (e) => {
                 e.stopPropagation(); // Stop click event from triggering card details switch
                 const modelObj = mapMarketReleaseToModel(item);
                 addDynamicModelToList(modelObj);
-                
+
                 // Update button state immediately
                 importBtn.classList.add("imported");
                 importBtn.textContent = "Imported";
                 importBtn.disabled = true;
             });
         }
-        
+
         card.addEventListener("click", (e) => {
             // If the user clicked the import button, do not switch tabs
             if (e.target.closest(".import-btn")) return;
-            
+
             const modelObj = mapMarketReleaseToModel(item);
-            
+
             // Display details
             displayModelDetails(modelObj);
-            
+
             // Switch tab to Model Finder (Model Search & Specs)
             const finderNav = document.querySelector('.nav-item[data-tab="model-finder"]');
             if (finderNav) finderNav.click();
         });
-        
+
         container.appendChild(card);
     });
 }
 
 function mapMarketReleaseToModel(item) {
     const isSLM = item.category === "SLM";
-    
+
     // Parse pricing out of cost string
     let inPrice = "$0.00";
     let outPrice = "$0.00";
     let pricingNote = "Free local weights.";
-    
+
     if (item.id === "deepseek-v3") {
         inPrice = "$0.14";
         outPrice = "$0.28";
@@ -1821,7 +1828,7 @@ function mapMarketReleaseToModel(item) {
     } else if (item.id === "phi-3-5-moe-instruct") {
         pricingNote = "MIT license, free to run locally.";
     }
-    
+
     const useCases = isSLM ? [
         "Offline chatbot and context analysis on-device",
         "Grammar correction, translation, and summaries",
@@ -1838,11 +1845,11 @@ function mapMarketReleaseToModel(item) {
         creator: item.creator,
         category: item.category,
         parameters: item.parameters,
-        accuracy: item.id === "deepseek-v3" ? "88.5% (MMLU)" : 
-                  item.id === "gemma-2-9b-it" ? "71.3% (MMLU)" :
-                  item.id === "claude-3-5-haiku" ? "75.2% (MMLU)" :
-                  item.id === "llama-3-1-8b-instruct" ? "68.4% (MMLU)" :
-                  item.id === "phi-3-5-moe-instruct" ? "68.8% (MMLU)" : "75.0% (MMLU)",
+        accuracy: item.id === "deepseek-v3" ? "88.5% (MMLU)" :
+            item.id === "gemma-2-9b-it" ? "71.3% (MMLU)" :
+                item.id === "claude-3-5-haiku" ? "75.2% (MMLU)" :
+                    item.id === "llama-3-1-8b-instruct" ? "68.4% (MMLU)" :
+                        item.id === "phi-3-5-moe-instruct" ? "68.8% (MMLU)" : "75.0% (MMLU)",
         context: item.context,
         cost: isSLM ? "$0.00 (Local)" : "Paid",
         license: item.license,
@@ -1860,22 +1867,22 @@ function mapMarketReleaseToModel(item) {
             note: pricingNote
         },
         flutter: {
-            intro: isSLM 
+            intro: isSLM
                 ? `To run ${item.name} locally in Flutter, download its GGUF weights and use llama.cpp:`
                 : `To query ${item.name} in Flutter, send standard HTTP requests to the cloud endpoint:`,
-            pubspec: isSLM 
+            pubspec: isSLM
                 ? "dependencies:\n  flutter:\n    sdk: flutter\n  llama_cpp_dart: ^0.2.1\n  path_provider: ^2.1.1"
                 : "dependencies:\n  flutter:\n    sdk: flutter\n  http: ^1.2.0",
-            main: isSLM 
+            main: isSLM
                 ? `import 'package:llama_cpp_dart/llama_cpp_dart.dart';\n\nFuture<String> runLocalModel(String prompt) async {\n  final params = ModelParams()..useGpu = true;\n  final model = LlamaModel('/path/to/${item.id}.gguf', params);\n  final context = LlamaContext(model, ContextParams()..contextSize = 2048);\n  \n  final tokens = context.tokenize(prompt, addBos: true);\n  context.eval(tokens);\n  return context.generateResponse();\n}`
                 : `import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nFuture<String> callCloudAPI(String prompt) async {\n  final url = Uri.parse('https://api.provider.com/v1/chat/completions');\n  final response = await http.post(url, headers: {\n    'Authorization': 'Bearer YOUR_API_KEY',\n    'content-type': 'application/json'\n  }, body: jsonEncode({\n    'model': '${item.id}',\n    'messages': [{'role': 'user', 'content': prompt}]\n  }));\n  final data = jsonDecode(response.body);\n  return data['choices'][0]['message']['content'] ?? '';\n}`
         }
     };
-    
+
     // Also attach properties required by layperson/training
     modelObj.simpleAnalogy = getAnalogyForMarketModel(item.id, item.name);
     modelObj.trainingData = item.trainingHighlight;
-    
+
     return modelObj;
 }
 
@@ -1910,22 +1917,22 @@ function setupGlossary() {
     const clearBtn = document.getElementById("glossary-clear-btn");
     const filterContainer = document.getElementById("glossary-filter-container");
     const stepButtons = document.querySelectorAll(".roadmap-step-btn");
-    
+
     if (!searchInput || !filterContainer) return;
-    
+
     // Render Filter Chips
     renderGlossaryChips();
-    
+
     // Initial card rendering
     renderGlossaryCards();
-    
+
     // Search event
     searchInput.addEventListener("input", (e) => {
         glossarySearchQuery = e.target.value.toLowerCase().trim();
         clearBtn.style.display = glossarySearchQuery.length > 0 ? "flex" : "none";
         renderGlossaryCards();
     });
-    
+
     // Clear search
     clearBtn.addEventListener("click", () => {
         searchInput.value = "";
@@ -1940,7 +1947,7 @@ function setupGlossary() {
             stepButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             currentRoadmapStep = btn.getAttribute("data-step");
-            
+
             // Clicking a step resets category filter to 'all' to prevent empty states
             currentGlossaryCategory = "all";
             renderGlossaryChips();
@@ -1952,9 +1959,9 @@ function setupGlossary() {
 function renderGlossaryChips() {
     const filterContainer = document.getElementById("glossary-filter-container");
     if (!filterContainer) return;
-    
+
     filterContainer.innerHTML = "";
-    
+
     Object.entries(glossaryCategories).forEach(([key, label]) => {
         const chip = document.createElement("button");
         chip.className = `search-tag ${currentGlossaryCategory === key ? 'active' : ''}`;
@@ -1962,7 +1969,7 @@ function renderGlossaryChips() {
         chip.textContent = label;
         chip.addEventListener("click", () => {
             currentGlossaryCategory = key;
-            
+
             // Clicking a category chip resets step roadmap filter to 'all'
             currentRoadmapStep = "all";
             const stepButtons = document.querySelectorAll(".roadmap-step-btn");
@@ -1973,7 +1980,7 @@ function renderGlossaryChips() {
                     b.classList.remove("active");
                 }
             });
-            
+
             renderGlossaryChips();
             renderGlossaryCards();
         });
@@ -1985,9 +1992,9 @@ function renderGlossaryCards() {
     const grid = document.getElementById("glossary-grid");
     const descBox = document.getElementById("roadmap-step-desc-box");
     if (!grid) return;
-    
+
     grid.innerHTML = "";
-    
+
     // Update step description box
     if (descBox) {
         if (currentRoadmapStep === "all") {
@@ -2000,7 +2007,7 @@ function renderGlossaryCards() {
             }
         }
     }
-    
+
     const filteredTerms = glossaryData.filter(item => {
         // Step filter
         if (currentRoadmapStep !== "all" && item.step !== parseInt(currentRoadmapStep)) {
@@ -2020,27 +2027,27 @@ function renderGlossaryCards() {
         }
         return true;
     });
-    
+
     if (filteredTerms.length === 0) {
         grid.innerHTML = `
             <div class="card glass-card" style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
                 <i data-lucide="help-circle" style="width: 48px; height: 48px; opacity: 0.5; color: var(--text-secondary);"></i>
-                <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: white;">No glossary terms match your search query.</p>
+                <p style="margin: 0; font-size: 1.1rem; font-weight: 500; color: var(--heading-color);">No glossary terms match your search query.</p>
                 <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">Try searching for standard concepts like 'quantization', 'attention', 'MoE', or 'MMLU'.</p>
             </div>
         `;
         lucide.createIcons();
         return;
     }
-    
+
     // Sort terms by step sequence
     filteredTerms.sort((a, b) => a.step - b.step);
-    
+
     // If viewing ALL categories and NO search query and ALL steps are selected, render step roadmap headers
     const showRoadmap = (currentGlossaryCategory === "all" && !glossarySearchQuery && currentRoadmapStep === "all");
-    
+
     let currentStepNumber = 0;
-    
+
     filteredTerms.forEach(item => {
         // If showing roadmap and we transition to a new step, render step header
         if (showRoadmap && item.step !== currentStepNumber) {
@@ -2050,51 +2057,59 @@ function renderGlossaryCards() {
                 const headerDiv = document.createElement("div");
                 headerDiv.className = "roadmap-step-header";
                 headerDiv.style.gridColumn = "1 / -1";
-                
+
                 headerDiv.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                        <span class="roadmap-badge" style="font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 0.25rem 0.65rem; border-radius: 12px; color: white; text-transform: uppercase;">Step ${stepInfo.number}</span>
-                    </div>
-                    <h4 style="margin: 0; font-size: 1.25rem; color: white; font-weight: 600;">${stepInfo.title}</h4>
-                    <p style="margin: 0.25rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${stepInfo.description}</p>
+                    <span class="roadmap-badge badge" style="font-size: 0.7rem; font-weight: 700; background: var(--primary); padding: 0.3rem 0.75rem; border-radius: 99px; color: #fff; text-transform: uppercase;">Step ${stepInfo.number}</span>
+                    <h4 style="margin: 0; font-weight: 600;">${stepInfo.title}</h4>
+                    <p style="margin: 0; font-size: 0.88rem; line-height: 1.5;">${stepInfo.description}</p>
                 `;
                 grid.appendChild(headerDiv);
             }
         }
-        
+
         const card = document.createElement("div");
         card.className = "card glass-card glossary-card";
-        
-        // Pick left border color based on category
+
+        // Pick accent color pair based on category (used for orb gradient + icon tint)
         let borderColor = "var(--primary)";
+        let orbColorA = "#004741";
+        let orbColorB = "#7fb6ae";
         if (item.category === "quantization" || item.category === "hardware") {
             borderColor = "var(--secondary)";
+            orbColorA = "#0e7490";
+            orbColorB = "#a5e8f5";
         } else if (item.category === "generation" || item.category === "training") {
             borderColor = "var(--success)";
+            orbColorA = "#047857";
+            orbColorB = "#a7f3d0";
         } else if (item.category === "evaluation") {
             borderColor = "var(--warning)";
+            orbColorA = "#b45309";
+            orbColorB = "#fde9c8";
         }
-        
+
         card.style.display = "flex";
         card.style.flexDirection = "column";
-        card.style.gap = "1rem";
-        card.style.padding = "1.5rem";
-        card.style.borderLeft = `4px solid ${borderColor}`;
+        card.style.gap = "1.1rem";
+        card.style.padding = "1.25rem";
         card.style.transition = "transform var(--transition-fast), box-shadow var(--transition-fast)";
-        
+
         card.innerHTML = `
-            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div class="logo-icon" style="width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; background: linear-gradient(135deg, ${borderColor}, rgba(255,255,255,0.15)); box-shadow: none; display: flex; align-items: center; justify-content: center;">
-                        <i data-lucide="${item.icon}" style="width: 18px; height: 18px; color: white;"></i>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 0;">
+                    <div class="glossary-card-icon-tile">
+                        <i data-lucide="${item.icon}" style="width: 18px; height: 18px; color: ${borderColor};"></i>
                     </div>
-                    <h4 style="margin: 0; font-size: 1.1rem; color: white; font-weight: 600;">${item.title}</h4>
+                    <h4 style="margin: 0; font-size: 1.05rem; color: var(--heading-color); font-weight: 600; line-height: 1.25;">${item.title}</h4>
                 </div>
-                <span class="badge-category" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 4px; text-transform: uppercase;">${glossaryCategories[item.category].split(" ")[0]}</span>
+                <div class="glossary-card-corner-btn" title="${glossaryCategories[item.category]}">
+                    <i data-lucide="arrow-up-right" style="width: 14px; height: 14px; color: ${borderColor};"></i>
+                </div>
             </div>
-            
+            <span class="badge-category" style="width: fit-content; font-size: 0.65rem; padding: 0.25rem 0.55rem; background: var(--overlay-05); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 99px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600;">${glossaryCategories[item.category].split(" ")[0]}</span>
+
             <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; line-height: 1.5;">
-                <div class="layperson-section" style="background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                <div class="layperson-section" style="background: var(--overlay-02); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--overlay-03);">
                     <div style="font-weight: 600; color: var(--secondary-light); margin-bottom: 0.25rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.25rem;">
                         <i data-lucide="info" style="width: 14px; height: 14px;"></i> Layperson & Selection View
                     </div>
@@ -2108,7 +2123,7 @@ function renderGlossaryCards() {
                     <p style="color: var(--text-secondary); margin: 0; font-size: 0.8rem;">${item.technical}</p>
                 </div>
                 
-                <div class="impact-section" style="background: rgba(139, 92, 246, 0.04); border-left: 2px solid var(--primary); padding: 0.5rem 0.75rem; border-radius: 0 6px 6px 0;">
+                <div class="impact-section" style="background: var(--accent-06); border-left: 2px solid var(--primary); padding: 0.5rem 0.75rem; border-radius: 0 6px 6px 0;">
                     <div style="font-weight: 600; color: var(--primary-light); margin-bottom: 0.25rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.25rem;">
                         <i data-lucide="settings" style="width: 14px; height: 14px;"></i> Selection Impact
                     </div>
@@ -2117,14 +2132,14 @@ function renderGlossaryCards() {
             </div>
             
             <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
-                <a href="${item.refLink}" target="_blank" style="font-size: 0.75rem; text-decoration: none; display: flex; align-items: center; gap: 0.35rem; color: var(--secondary-light); padding: 0.35rem 0.6rem; border-radius: 4px; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.15); transition: background var(--transition-fast); font-weight: 500;">
+                <a href="${item.refLink}" target="_blank" style="font-size: 0.75rem; text-decoration: none; display: flex; align-items: center; gap: 0.35rem; color: var(--secondary-light); padding: 0.35rem 0.6rem; border-radius: 4px; background: var(--accent2-05); border: 1px solid var(--accent2-15); transition: background var(--transition-fast); font-weight: 500;">
                     <span>Official Reference Documentation</span> <i data-lucide="external-link" style="width: 12px; height: 12px;"></i>
                 </a>
             </div>
         `;
         grid.appendChild(card);
     });
-    
+
     lucide.createIcons();
 }
 
@@ -2492,7 +2507,7 @@ function setupNewsHub() {
 
             let formattedHandle = handle;
             let formattedUrl = handle.startsWith("http") ? handle : `https://google.com/search?q=${encodeURIComponent(name)}`;
-            
+
             if (type === "reddit") {
                 formattedHandle = handle.startsWith("r/") ? handle : `r/${handle}`;
                 formattedUrl = `https://reddit.com/${formattedHandle}`;
@@ -2518,7 +2533,7 @@ function setupNewsHub() {
             try {
                 const stored = localStorage.getItem("modelverse_news_sources");
                 if (stored) currentCustom = JSON.parse(stored);
-            } catch (err) {}
+            } catch (err) { }
 
             currentCustom.push(newSource);
             localStorage.setItem("modelverse_news_sources", JSON.stringify(currentCustom));
@@ -2559,12 +2574,12 @@ function renderNewsSourcesDirectory(customSources = []) {
     combinedSources.forEach(src => {
         const card = document.createElement("div");
         card.className = "news-source-card";
-        
+
         // Custom background style depending on source type
         let iconHtml = '<i data-lucide="globe"></i>';
         let badgeClass = "badge-type local";
         let label = "Web Link";
-        
+
         if (src.type === "blogs") {
             iconHtml = '<i data-lucide="mail" style="color: var(--secondary-light);"></i>';
             badgeClass = "badge-type local";
@@ -2578,7 +2593,7 @@ function renderNewsSourcesDirectory(customSources = []) {
             badgeClass = "badge-type";
             label = "YouTube Channel";
         } else if (src.type === "github") {
-            iconHtml = '<i data-lucide="github" style="color: white;"></i>';
+            iconHtml = '<i data-lucide="github" style="color: var(--heading-color);"></i>';
             badgeClass = "badge-type local";
             label = "GitHub Project";
         } else if (src.type === "models") {
@@ -2599,12 +2614,12 @@ function renderNewsSourcesDirectory(customSources = []) {
 
         card.innerHTML = `
             <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <div class="source-icon-wrapper" style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.15rem;">
+                <div class="source-icon-wrapper" style="width: 32px; height: 32px; border-radius: 8px; background: var(--overlay-03); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.15rem;">
                     ${iconHtml}
                 </div>
                 <div style="flex-grow: 1;">
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
-                        <strong style="color: white; font-size: 0.85rem;">${src.name}</strong>
+                        <strong style="color: var(--heading-color); font-size: 0.85rem;">${src.name}</strong>
                         <span class="${badgeClass}" style="font-size: 0.65rem; padding: 0.1rem 0.35rem; margin: 0;">${label}</span>
                     </div>
                     <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 1px;">${src.handle}</span>
@@ -2647,11 +2662,11 @@ function deleteCustomSource(sourceId) {
     try {
         const stored = localStorage.getItem("modelverse_news_sources");
         if (stored) customSources = JSON.parse(stored);
-    } catch (e) {}
-    
+    } catch (e) { }
+
     customSources = customSources.filter(src => src.id !== sourceId);
     localStorage.setItem("modelverse_news_sources", JSON.stringify(customSources));
-    
+
     // Refresh the directory list
     renderNewsSourcesDirectory(customSources);
     showToastNotification("🗑️ Custom source removed successfully.");
@@ -2706,14 +2721,14 @@ function renderNewsFeed() {
 
     groupedFeed.forEach(item => {
         const isAlreadyImported = item.modelLink ? allModels.some(m => m.id.toLowerCase() === item.modelLink.id.toLowerCase()) : false;
-        
+
         const card = document.createElement("div");
         card.className = "news-feed-card card glass-card";
-        
+
         // Highlight simulated alerts slightly
         if (item.isAlert) {
             card.style.borderColor = "var(--secondary)";
-            card.style.boxShadow = "inset 0 0 15px rgba(6, 182, 212, 0.08), 0 4px 25px rgba(0, 0, 0, 0.2)";
+            card.style.boxShadow = "inset 0 0 15px var(--accent2-08), 0 4px 25px rgba(0, 0, 0, 0.2)";
         } else {
             card.style.borderColor = "var(--border-color)";
         }
@@ -2794,15 +2809,15 @@ function renderNewsFeed() {
         let modelAttachmentHtml = "";
         if (item.modelLink) {
             modelAttachmentHtml = `
-                <div class="model-news-attachment" style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                <div class="model-news-attachment" style="background: var(--overlay-015); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
                         <div>
-                            <span class="badge" style="font-size: 0.65rem; background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.15); color: var(--primary-light); padding: 0.15rem 0.5rem; text-transform: uppercase;">Announced Model</span>
-                            <h5 style="color: white; margin-top: 0.25rem; font-size: 0.95rem;">${item.modelLink.name}</h5>
+                            <span class="badge" style="font-size: 0.65rem; background: var(--accent-08); border-color: var(--accent-15); color: var(--primary-light); padding: 0.15rem 0.5rem; text-transform: uppercase;">Announced Model</span>
+                            <h5 style="color: var(--heading-color); margin-top: 0.25rem; font-size: 0.95rem;">${item.modelLink.name}</h5>
                             <span style="font-size: 0.75rem; color: var(--text-muted);">Creator: ${item.modelLink.creator} | Parameters: ${item.modelLink.parameters}</span>
                         </div>
                         <div style="display: flex; gap: 0.5rem;">
-                            <button class="inspect-model-btn search-btn" data-model-id="${item.modelLink.id}" style="font-size: 0.75rem; padding: 0.45rem 0.75rem; border-radius: 6px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: white; cursor: pointer; box-shadow: none;">
+                            <button class="inspect-model-btn search-btn" data-model-id="${item.modelLink.id}" style="font-size: 0.75rem; padding: 0.45rem 0.75rem; border-radius: 6px; background: var(--overlay-03); border: 1px solid var(--border-color); color: var(--heading-color); cursor: pointer; box-shadow: none;">
                                 Inspect Specs
                             </button>
                             <button class="import-news-model-btn search-btn ${isAlreadyImported ? 'imported' : ''}" ${isAlreadyImported ? 'disabled' : ''} data-model-idx="${item.id}" style="font-size: 0.75rem; padding: 0.45rem 0.75rem; border-radius: 6px;">
@@ -2861,27 +2876,27 @@ function renderNewsFeed() {
                     </div>
                     <div class="grouped-sources-links">
                         ${item.relatedSources.map(rel => {
-                            let relIcon = "globe";
-                            let relName = rel.authorName;
-                            if (rel.platform === "reddit") {
-                                relIcon = "message-square";
-                            } else if (rel.platform === "videos") {
-                                relIcon = "play";
-                                relName = `${rel.authorName} (Video)`;
-                            } else if (rel.platform === "github") {
-                                relIcon = "git-pull-request";
-                                relName = `${rel.authorName} (GitHub)`;
-                            }
-                            
-                            const targetUrl = rel.url || rel.videoUrl || rel.githubUrl || "#";
-                            
-                            return `
+                let relIcon = "globe";
+                let relName = rel.authorName;
+                if (rel.platform === "reddit") {
+                    relIcon = "message-square";
+                } else if (rel.platform === "videos") {
+                    relIcon = "play";
+                    relName = `${rel.authorName} (Video)`;
+                } else if (rel.platform === "github") {
+                    relIcon = "git-pull-request";
+                    relName = `${rel.authorName} (GitHub)`;
+                }
+
+                const targetUrl = rel.url || rel.videoUrl || rel.githubUrl || "#";
+
+                return `
                                 <a href="${targetUrl}" target="_blank" class="grouped-source-link">
                                     <i data-lucide="${relIcon}" style="width: 12px; height: 12px;"></i>
                                     <span>${relName}</span>
                                 </a>
                             `;
-                        }).join("")}
+            }).join("")}
                     </div>
                 </div>
             `;
@@ -2891,19 +2906,19 @@ function renderNewsFeed() {
         let externalActionHtml = "";
         if (item.videoUrl) {
             externalActionHtml = `
-                <a href="${item.videoUrl}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: none; margin-top: 0.75rem;">
+                <a href="${item.videoUrl}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: #b91c1c; box-shadow: none; margin-top: 0.75rem;">
                     <i data-lucide="youtube" style="width: 16px; height: 16px;"></i> Watch Video
                 </a>
             `;
         } else if (item.githubUrl) {
             externalActionHtml = `
-                <a href="${item.githubUrl}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: white; box-shadow: none; margin-top: 0.75rem;">
+                <a href="${item.githubUrl}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: var(--overlay-05); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none; margin-top: 0.75rem;">
                     <i data-lucide="github" style="width: 16px; height: 16px;"></i> View Release Notes
                 </a>
             `;
         } else if (item.url && item.platform === "blogs") {
             externalActionHtml = `
-                <a href="${item.url}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: white; box-shadow: none; margin-top: 0.75rem;">
+                <a href="${item.url}" target="_blank" class="search-btn" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px; background: var(--overlay-05); border: 1px solid var(--border-color); color: var(--heading-color); box-shadow: none; margin-top: 0.75rem;">
                     <i data-lucide="external-link" style="width: 16px; height: 16px;"></i> Read Article
                 </a>
             `;
@@ -2921,7 +2936,7 @@ function renderNewsFeed() {
                 <div style="flex-grow: 1;">
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                            <strong style="color: white; font-size: 0.95rem;">${item.authorName}</strong>
+                            <strong style="color: var(--heading-color); font-size: 0.95rem;">${item.authorName}</strong>
                             <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">${item.handle}</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -2939,7 +2954,7 @@ function renderNewsFeed() {
                     ${aiSummaryHtml}
                     ${groupedSourcesHtml}
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 0.75rem; padding-top: 0.25rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--overlay-03); margin-top: 0.75rem; padding-top: 0.25rem;">
                         ${metricsHtml}
                         ${externalActionHtml}
                     </div>
@@ -2957,9 +2972,9 @@ function renderNewsFeed() {
                     // Enrich and display in Model Finder
                     const modelCopy = { ...item.modelLink };
                     enrichModelData(modelCopy);
-                    
+
                     displayModelDetails(modelCopy);
-                    
+
                     // Switch tab to Model Finder (Model Search & Specs)
                     const finderNav = document.querySelector('.nav-item[data-tab="model-finder"]');
                     if (finderNav) finderNav.click();
@@ -2970,7 +2985,7 @@ function renderNewsFeed() {
                 importBtn.addEventListener("click", () => {
                     const modelCopy = { ...item.modelLink };
                     addDynamicModelToList(modelCopy);
-                    
+
                     // Update state in button
                     importBtn.classList.add("imported");
                     importBtn.textContent = "Imported";
@@ -2988,7 +3003,7 @@ function renderNewsFeed() {
 // Client-Side AI Heuristics Summary Layer
 function processNewsItem(item) {
     if (item.summary && item.highlights && item.tags) return item; // Already processed
-    
+
     // Trim summary
     const cleanContent = stripHtml(item.content || "").replace(/🎥|💻|🤖|📝|💬/g, "").trim();
     let summary = cleanContent;
@@ -3011,7 +3026,7 @@ function processNewsItem(item) {
     // Generate semantic tags
     const lowerText = cleanContent.toLowerCase();
     const tagSet = new Set();
-    
+
     if (lowerText.includes("llama")) tagSet.add("Llama");
     if (lowerText.includes("gemma")) tagSet.add("Gemma");
     if (lowerText.includes("deepseek")) tagSet.add("DeepSeek");
@@ -3037,7 +3052,7 @@ function processNewsItem(item) {
     item.summary = summary;
     item.highlights = highlights.slice(0, 2); // limit to 2 highlights for simple reading layout
     item.tags = Array.from(tagSet).slice(0, 3); // limit to 3 tags
-    
+
     return item;
 }
 
@@ -3045,17 +3060,17 @@ function processNewsItem(item) {
 function groupSimilarStories(feedItems) {
     const grouped = [];
     const visited = new Set();
-    
+
     for (let i = 0; i < feedItems.length; i++) {
         if (visited.has(feedItems[i].id)) continue;
-        
+
         const current = feedItems[i];
         const cluster = [current];
         visited.add(current.id);
-        
+
         for (let j = i + 1; j < feedItems.length; j++) {
             if (visited.has(feedItems[j].id)) continue;
-            
+
             const target = feedItems[j];
             const similarity = calculateTitleSimilarity(current.content || "", target.content || "");
             if (similarity > 0.3) { // 30% Jaccard word-overlap threshold
@@ -3063,7 +3078,7 @@ function groupSimilarStories(feedItems) {
                 visited.add(target.id);
             }
         }
-        
+
         if (cluster.length > 1) {
             current.relatedSources = cluster.slice(1);
         } else {
@@ -3076,23 +3091,23 @@ function groupSimilarStories(feedItems) {
 
 function calculateTitleSimilarity(str1, str2) {
     if (!str1 || !str2) return 0;
-    
+
     const cleanTokens = str => str.toLowerCase()
         .replace(/🎥|💻|🤖|📝|💬|http[^\s]+/g, "")
         .replace(/[^\w\s]/g, "")
         .split(/\s+/)
         .filter(w => w.length > 3);
-        
+
     const words1 = new Set(cleanTokens(str1));
     const words2 = new Set(cleanTokens(str2));
-    
+
     if (words1.size === 0 || words2.size === 0) return 0;
-    
+
     let intersection = 0;
     words1.forEach(w => {
         if (words2.has(w)) intersection++;
     });
-    
+
     const union = words1.size + words2.size - intersection;
     return intersection / union;
 }
@@ -3135,17 +3150,17 @@ function triggerLiveNewsAlert() {
 async function fetchLiveNewsUpdates() {
     const refreshBtn = document.getElementById("refresh-news-btn");
     let originalHtml = "";
-    
+
     if (refreshBtn) {
         originalHtml = refreshBtn.innerHTML;
-        refreshBtn.innerHTML = `<i class="spinner" style="border-width: 1.5px; width: 10px; height: 10px; display: inline-block; border-color: rgba(6, 182, 212, 0.2); border-top-color: var(--secondary-light);"></i> Fetching...`;
+        refreshBtn.innerHTML = `<i class="spinner" style="border-width: 1.5px; width: 10px; height: 10px; display: inline-block; border-color: var(--accent2-20); border-top-color: var(--secondary-light);"></i> Fetching...`;
         refreshBtn.disabled = true;
     }
-    
+
     showToastNotification("🔄 Fetching live updates from RSS, Reddit, GitHub, and Hugging Face...");
-    
+
     const fetchedItems = [];
-    
+
     // 1. Fetch Hugging Face Blog via RSS2JSON
     try {
         const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://huggingface.co/blog/feed.xml")}`);
@@ -3206,10 +3221,10 @@ async function fetchLiveNewsUpdates() {
                 redditData.data.children.forEach(p => {
                     const post = p.data;
                     if (post.stickied) return;
-                    
+
                     const timeStr = "recently";
                     const cleanText = post.selftext ? stripHtml(post.selftext) : "";
-                    
+
                     fetchedItems.push({
                         id: `live-reddit-${post.id}`,
                         authorName: "r/LocalLLaMA",
@@ -3287,7 +3302,7 @@ async function fetchLiveNewsUpdates() {
     if (fetchedItems.length > 0) {
         // Prepend new feeds to the front
         simulatedNewsFeed = [...fetchedItems, ...simulatedNewsFeed];
-        
+
         // Remove duplicates if any
         const seenIds = new Set();
         simulatedNewsFeed = simulatedNewsFeed.filter(item => {
@@ -3295,10 +3310,10 @@ async function fetchLiveNewsUpdates() {
             seenIds.add(item.id);
             return true;
         });
-        
+
         // Render feed
         renderNewsFeed();
-        
+
         // Change online status indicator to sync state
         const statusText = document.querySelector(".system-status span");
         const indicator = document.querySelector(".status-indicator");
@@ -3306,12 +3321,12 @@ async function fetchLiveNewsUpdates() {
             statusText.textContent = "AI news feeds synced";
             indicator.className = "status-indicator online";
         }
-        
+
         showToastNotification(`✅ Sync successful! Loaded ${fetchedItems.length} live updates.`);
     } else {
         showToastNotification("⚠️ Could not load live feeds. Fallback to offline stream.");
     }
-    
+
     // Restore button state
     if (refreshBtn) {
         refreshBtn.innerHTML = originalHtml;
@@ -3323,7 +3338,7 @@ async function fetchLiveNewsUpdates() {
 // Help resolve model attachments based on news text content
 function getModelLinkFromText(text) {
     const lower = text.toLowerCase();
-    
+
     if (lower.includes("gemma 3") || lower.includes("gemma-3")) {
         return {
             id: "gemma-3-3b-it",
@@ -3456,6 +3471,44 @@ function triggerAutoNewsFetch() {
         hasFetchedLiveNews = true;
         fetchLiveNewsUpdates();
     }
+}
+
+// THEME TOGGLE (LIGHT / DARK)
+function setupThemeToggle() {
+    const btn = document.getElementById("theme-toggle-btn");
+    if (!btn) return;
+
+    const icon = btn.querySelector("i");
+
+    const applyIcon = (theme) => {
+        if (icon) {
+            icon.setAttribute("data-lucide", theme === "dark" ? "sun" : "moon");
+        }
+        if (window.lucide) {
+            btn.innerHTML = "";
+            const fresh = document.createElement("i");
+            fresh.setAttribute("data-lucide", theme === "dark" ? "sun" : "moon");
+            btn.appendChild(fresh);
+            lucide.createIcons();
+        }
+    };
+
+    const currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    applyIcon(currentTheme);
+
+    btn.addEventListener("click", () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const nextTheme = isDark ? "light" : "dark";
+
+        if (nextTheme === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+        }
+
+        localStorage.setItem("modelverse-theme", nextTheme);
+        applyIcon(nextTheme);
+    });
 }
 
 // MOBILE SIDEBAR TOGGLE LOGIC
